@@ -1,8 +1,10 @@
 package com.API.musica.servicios;
 
+import com.API.musica.configuracion.OpenWeatherMapCache;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 
+import javax.annotation.PostConstruct;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -21,6 +24,14 @@ public class Conector_OpenWeatherMap {
 
     @Value("${keyOpenWeatherMap}")
     private String apiKey;
+
+    @Autowired
+    OpenWeatherMapCache openWeatherMapCache;
+
+    @PostConstruct
+    public void iniciarLimpiarCache() {
+        openWeatherMapCache.limpiarCache();
+    }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Conector_OpenWeatherMap.class);
 
