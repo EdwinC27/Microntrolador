@@ -1,28 +1,40 @@
 package com.API.musica.servicios;
 
+import com.API.musica.configuracion.SpotifyCache;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@EnableScheduling
 public class Conector_Spotify {
     private static final Logger LOGGER = LoggerFactory.getLogger(Conector_Spotify.class);
+
+    @Autowired
+    private SpotifyCache spotifyCache;
 
     @Autowired
     private Llave_Spotify llave_spotify;
 
     private Map<String, String> cacheResultados = new HashMap<>();
+
+    @PostConstruct
+    public void iniciarLimpiarCache() {
+        spotifyCache.limpiarCache();
+    }
 
     public void peticionCanciones(String accessToken, String genero) {
         String API_URL = "https://api.spotify.com/v1/search?q=genre:" + genero + "&type=track";

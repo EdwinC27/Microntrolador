@@ -18,7 +18,7 @@ public class Consulta {
     @Autowired
     Conector_Spotify conector_spotify;
 
-    @GetMapping("/")
+    @GetMapping("/api/")
     public void getTemperatura(@RequestParam(value = "ciudad", required = false) String ciudad,
                                @RequestParam(value = "latitud", required = false) Double latitud,
                                @RequestParam(value = "longitud", required = false) Double longitud) {

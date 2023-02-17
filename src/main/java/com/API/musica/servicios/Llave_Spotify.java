@@ -27,7 +27,7 @@ public class Llave_Spotify {
     private Instant expirationTime; // variable miembro para almacenar la fecha de expiración del token
 
 
-    public synchronized String getToken() { // método sincronizado para asegurar el acceso atómico a las variables miembro
+    public String getToken() { // método sincronizado para asegurar el acceso atómico a las variables miembro
         if (accessToken != null && expirationTime != null && Instant.now().isBefore(expirationTime)) {
             return accessToken; // si el token actual está vigente, devolverlo
         }
