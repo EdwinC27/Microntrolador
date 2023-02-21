@@ -31,12 +31,14 @@ public class Conector_Spotify {
 
     private Map<String, String> cacheResultados = new HashMap<>();
 
+    public static String genero;
+
     @PostConstruct
     public void iniciarLimpiarCache() {
         spotifyCache.limpiarCache();
     }
 
-    public void peticionCanciones(String accessToken, String genero) {
+    public String peticionCanciones(String accessToken, String genero) {
         String API_URL = "https://api.spotify.com/v1/search?q=genre:" + genero + "&type=track";
         String cabezeraConToken = "Bearer " + accessToken;
 
@@ -52,45 +54,49 @@ public class Conector_Spotify {
             String response = cacheResultados.get(cacheKey);
             ObjectMapper mapper = new ObjectMapper();
 
-            mostrarCanciones(mapper, response);
+            return mostrarCanciones(mapper, response);
         } else {
             // Si los resultados no están en la caché, realiza una solicitud a la API de Spotify
             String response = restTemplate.exchange(API_URL, HttpMethod.GET, request, String.class, "<album_id>").getBody();
             cacheResultados.put(cacheKey, response); // Agrega los resultados a la caché
             ObjectMapper mapper = new ObjectMapper();
 
-            mostrarCanciones(mapper, response);
+            return mostrarCanciones(mapper, response);
         }
     }
 
-    public void mostrarCanciones(ObjectMapper mapper, String response) {
+    public String mostrarCanciones(ObjectMapper mapper, String response) {
+        String name="";
         try {
             JsonNode root = mapper.readTree(response);
             JsonNode itemsNode = root.path("tracks").path("items");
             for (JsonNode item : itemsNode) {
                 JsonNode nameNode = item.path("name");
-                String name = nameNode.asText();
-                LOGGER.debug(name);
+                name += nameNode.asText();
+                name += ".      ";
             }
+            LOGGER.debug(name);
+            return name;
         } catch (IOException e) {
             e.printStackTrace();
+            return "Error al generar la lista de canciones";
         }
     }
 
-    public void peticionGenero(double temperatura) {
+    public String peticionGenero(double temperatura) {
         String token = llave_spotify.getToken();
 
         if(token.equals(" ")) {
             LOGGER.debug("Error en el token");
-            return;
+            return "Error en el token";
         }
 
-        String genero = "clasica";
+        genero = "clasica";
 
         if(temperatura > 30) genero = "fiesta";
         else if (temperatura >= 15 && temperatura <=30) genero = "pop";
         else if (temperatura >= 10 && temperatura <= 14) genero = "rock";
 
-        peticionCanciones(token, genero);
+        return peticionCanciones(token, genero);
     }
 }
