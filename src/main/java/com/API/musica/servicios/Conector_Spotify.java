@@ -15,7 +15,9 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -38,7 +40,7 @@ public class Conector_Spotify {
         spotifyCache.limpiarCache();
     }
 
-    public String peticionCanciones(String accessToken, String genero) {
+    public List<String> peticionCanciones(String accessToken, String genero) {
         String API_URL = "https://api.spotify.com/v1/search?q=genre:" + genero + "&type=track";
         String cabezeraConToken = "Bearer " + accessToken;
 
@@ -65,30 +67,28 @@ public class Conector_Spotify {
         }
     }
 
-    public String mostrarCanciones(ObjectMapper mapper, String response) {
-        String name="";
+    public List<String> mostrarCanciones(ObjectMapper mapper, String response) {
+        List<String> name = new ArrayList<>();
         try {
             JsonNode root = mapper.readTree(response);
             JsonNode itemsNode = root.path("tracks").path("items");
             for (JsonNode item : itemsNode) {
                 JsonNode nameNode = item.path("name");
-                name += nameNode.asText();
-                name += ".      ";
+                name.add(nameNode.asText());
             }
-            LOGGER.debug(name);
             return name;
         } catch (IOException e) {
             e.printStackTrace();
-            return "Error al generar la lista de canciones";
+            return List.of("Error al generar la lista de canciones");
         }
     }
 
-    public String peticionGenero(double temperatura) {
+    public List<String> peticionGenero(double temperatura) {
         String token = llave_spotify.getToken();
 
         if(token.equals(" ")) {
             LOGGER.debug("Error en el token");
-            return "Error en el token";
+            return List.of("Error en el token");
         }
 
         genero = "clasica";
