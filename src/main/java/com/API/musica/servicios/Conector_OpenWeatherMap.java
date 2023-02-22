@@ -1,6 +1,7 @@
 package com.API.musica.servicios;
 
 import com.API.musica.configuracion.OpenWeatherMapCache;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
@@ -36,10 +38,10 @@ public class Conector_OpenWeatherMap {
     private static final Logger LOGGER = LoggerFactory.getLogger(Conector_OpenWeatherMap.class);
 
     // Mapa para almacenar los resultados de las solicitudes
-    private Map<String, Double> cache = new HashMap<>();
+    private Map<String, String> cache = new HashMap<>();
 
     @Retryable(value = {ResourceAccessException.class}, maxAttempts = 3, backoff = @Backoff(delay = 5000))
-    public double getURLCiudad(String ciudad) {
+    public String getURLCiudad(String ciudad) {
         try {
             URL url = new URL("http://api.openweathermap.org/data/2.5/weather?q=" + ciudad + "&appid="+apiKey);
 
@@ -51,7 +53,7 @@ public class Conector_OpenWeatherMap {
     }
 
     @Retryable(value = {ResourceAccessException.class}, maxAttempts = 3, backoff = @Backoff(delay = 5000))
-    public double getURLCordenada(double latitud, double longitud) {
+    public String getURLCordenada(double latitud, double longitud) {
         try {
             URL url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + latitud + "&lon=" + longitud + "&appid="+apiKey);
 
@@ -62,7 +64,7 @@ public class Conector_OpenWeatherMap {
         }
     }
 
-    private double getTemperatura(URL url) {
+    private String getTemperatura(URL url) {
         String urlStr = url.toString();
         // Verificar si la solicitud ya está en caché
         if (cache.containsKey(urlStr)) {
@@ -83,15 +85,15 @@ public class Conector_OpenWeatherMap {
             double temperature = main.getDouble("temp"); // Te devuelve la temperatura en grados Kelvin
 
             // Almacenar el resultado en caché
-            cache.put(urlStr, temperature - 273.15);
+            cache.put(urlStr, String.valueOf(temperature - 273.15));
 
-            return temperature - 273.15; // Convertir la temperatura en grados Celsius
-        } catch (ResourceAccessException e) { // error al acceder a un recurso remoto a través de HTTP
-            LOGGER.error("No se pudo obtener la temperatura: {}", e.getMessage());
-            throw new RuntimeException("No se pudo obtener la temperatura: " + e.getMessage(), e);
-        } catch (Exception e) {
+            return String.valueOf(temperature - 273.15); // Convertir la temperatura en grados Celsius
+        } catch (JSONException e) {
             LOGGER.error("Ocurrió un error inesperado al obtener la temperatura: {}", e.getMessage());
-            throw new RuntimeException("Ocurrió un error inesperado al obtener la temperatura: " + e.getMessage(), e);
+            return "Ocurrió un error inesperado al obtener la temperatura";
+        } catch (RestClientException e) {
+            LOGGER.error("Ocurrió un error inesperado al obtener la temperatura: {}", e.getMessage());
+            return "Ocurrió un error inesperado al obtener la temperatura en la ciudad";
         }
     }
 

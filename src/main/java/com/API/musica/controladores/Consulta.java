@@ -1,5 +1,6 @@
 package com.API.musica.controladores;
 
+import com.API.musica.configuracion.ComprobarConexionJava;
 import com.API.musica.entidades.ListaMusica;
 import com.API.musica.repositorios.RepositorioListaMusica;
 import com.API.musica.servicios.Conector_OpenWeatherMap;
@@ -28,36 +29,48 @@ public class Consulta {
     @Autowired
     Conector_Spotify conector_spotify;
 
-    static double temperatura;
+    static String temperatura;
     static String canciones;
 
     @GetMapping("/api/temperatura")
     public List<String> getTemperatura(@RequestParam(value = "ciudad", required = false) String ciudad, @RequestParam(value = "latitud", required = false) Double latitud, @RequestParam(value = "longitud", required = false) Double longitud) {
-        try {
-            if (ciudad != null) {
-                temperatura = conector_openWeatherMap.getURLCiudad(ciudad);
-                canciones = String.join("#", conector_spotify.peticionGenero(temperatura));
-                guardarMiEntidad(ciudad);
+        ComprobarConexionJava comprobarConexionJava = new ComprobarConexionJava();
 
-                LOGGER.debug("Temperatura en " + ciudad + ": " + temperatura + "     Celsius");
-                return conector_spotify.peticionGenero(temperatura);
+        if(comprobarConexionJava.conexion()) {
+            try {
+                if (ciudad != null) {
+                    temperatura = conector_openWeatherMap.getURLCiudad(ciudad);
 
-            } else if (latitud != null && longitud != null) {
-                temperatura = conector_openWeatherMap.getURLCordenada(latitud, longitud);
-                canciones = String.join("#", conector_spotify.peticionGenero(temperatura));
-                String ciudadConvertidad = latitud.toString() + " " + longitud.toString();
-                guardarMiEntidad(ciudadConvertidad);
+                    canciones = String.join("#", conector_spotify.peticionGenero(Double.parseDouble(temperatura)));
+                    guardarMiEntidad(ciudad);
 
-                LOGGER.debug("Temperatura: " + temperatura + "    Celsius");
-                return conector_spotify.peticionGenero(temperatura);
-            } else {
-                LOGGER.debug("Se requiere una ciudad o coordenadas de latitud y longitud");
-                return List.of("Se requiere una ciudad o coordenadas de latitud y longitud");
+                    LOGGER.debug("Temperatura en " + ciudad + ": " + temperatura + "     Celsius");
+                    return conector_spotify.peticionGenero(Double.parseDouble(temperatura));
+
+                } else if (latitud != null && longitud != null) {
+                    temperatura = conector_openWeatherMap.getURLCordenada(latitud, longitud);
+                    if(temperatura.equals("Ocurrió un error inesperado al obtener la temperatura")) return List.of("Ocurrió un error inesperado al obtener la temperatura");
+                    if(temperatura.equals("Ocurrió un error inesperado al obtener la temperatura en la ciudad")) return List.of("Ocurrió un error inesperado al obtener la temperatura en la ciudad");
+
+                    canciones = String.join("#", conector_spotify.peticionGenero(Double.parseDouble(temperatura)));
+                    String ciudadConvertidad = latitud.toString() + " " + longitud.toString();
+                    guardarMiEntidad(ciudadConvertidad);
+
+                    LOGGER.debug("Temperatura: " + temperatura + "    Celsius");
+                    return conector_spotify.peticionGenero(Double.parseDouble(temperatura));
+                } else {
+                    LOGGER.debug("Se requiere una ciudad o coordenadas de latitud y longitud");
+                    return List.of("Se requiere una ciudad o coordenadas de latitud y longitud");
+                }
+            } catch (Exception e) {
+                if(temperatura.equals("Ocurrió un error inesperado al obtener la temperatura")) return List.of("Ocurrió un error inesperado al obtener la temperatura");
+                if(temperatura.equals("Ocurrió un error inesperado al obtener la temperatura en la ciudad")) return List.of("Ocurrió un error inesperado al obtener la temperatura en la ciudad");
             }
-        } catch (Exception e) {
-            LOGGER.debug("Error al conectartes");
+            return List.of("Error al conectartes");
         }
-        return List.of("Error al conectartes");
+        else {
+            return List.of("Error al conectartes");
+        }
     }
 
     public void guardarMiEntidad(String ciudad) {
