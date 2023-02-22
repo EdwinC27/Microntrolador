@@ -13,7 +13,9 @@ public class SpotifyCache {
 
     private Map<String, String> cacheResultados = new HashMap<>();
 
-    @Scheduled(fixedRate = 43200000) // 12 horas en milisegundos
+    private static final long MILISEGUNDO_HORA = 3_600_000;
+
+    @Scheduled(fixedRate = MILISEGUNDO_HORA * 12) // 12 horas en milisegundos
     public void limpiarCache() {
         cacheResultados.clear();
     }

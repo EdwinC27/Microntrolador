@@ -13,7 +13,9 @@ public class OpenWeatherMapCache {
 
     private Map<String, Double> cacheResultados = new HashMap<>();
 
-    @Scheduled(fixedRate = 180000) // 3 minutos en milisegundos
+    private static final long MILISEGUNDO_MINUTO = 60000;
+
+    @Scheduled(fixedRate = MILISEGUNDO_MINUTO * 3) // 3 minutos en milisegundos
     public void limpiarCache() {
         cacheResultados.clear();
     }
