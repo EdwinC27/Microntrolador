@@ -33,3 +33,5 @@ tiempo. Después de obtener los datos de ambas API, se guarda la información re
 las canciones recomendadas en una base de datos Postgres.
 
 La ruta para entrar a la aplicacion es:    /api/temperatura/
+
+<img src="https://github.com/EdwinC27/Microcontrolador/blob/main/diagramaSecuencia.png">
