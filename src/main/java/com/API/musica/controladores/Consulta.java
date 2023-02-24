@@ -5,6 +5,9 @@ import com.API.musica.entidades.ListaMusica;
 import com.API.musica.repositorios.RepositorioListaMusica;
 import com.API.musica.servicios.Conector_OpenWeatherMap;
 import com.API.musica.servicios.Conector_Spotify;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,12 @@ public class Consulta {
     static String canciones;
 
     @GetMapping("/api/temperatura")
+    @Operation(summary = "Obtener la temperatura y las canciones recomendadas para una ciudad o coordenadas geográficas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Temperatura y canciones recomendadas obtenidas exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Parámetros incorrectos o faltantes"),
+            @ApiResponse(responseCode = "500", description = "Error al conectarse con los servicios externos")
+    })
     public List<String> getTemperatura(@RequestParam(value = "ciudad", required = false) String ciudad, @RequestParam(value = "latitud", required = false) Double latitud, @RequestParam(value = "longitud", required = false) Double longitud) {
         ComprobarConexionJava comprobarConexionJava = new ComprobarConexionJava();
 
