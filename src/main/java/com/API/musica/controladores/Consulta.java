@@ -49,6 +49,8 @@ public class Consulta {
             try {
                 if (ciudad != null) {
                     temperatura = conector_openWeatherMap.getURLCiudad(ciudad);
+                    if(temperatura.equals("No se pudo traer la URL de OpenWeatherMaps con el nombre de la ciudad")) return List.of("No se pudo traer la URL de OpenWeatherMaps con el nombre de la ciudad");
+                    if(conector_spotify.peticionGenero(Double.parseDouble(temperatura)).equals("Error al generar la lista de canciones")) return List.of("Error al generar la lista de canciones");
 
                     canciones = String.join("#", conector_spotify.peticionGenero(Double.parseDouble(temperatura)));
                     guardarMiEntidad(ciudad);
@@ -58,8 +60,8 @@ public class Consulta {
 
                 } else if (latitud != null && longitud != null) {
                     temperatura = conector_openWeatherMap.getURLCordenada(latitud, longitud);
-                    if(temperatura.equals("Ocurrió un error inesperado al obtener la temperatura")) return List.of("Ocurrió un error inesperado al obtener la temperatura");
-                    if(temperatura.equals("Ocurrió un error inesperado al obtener la temperatura en la ciudad")) return List.of("Ocurrió un error inesperado al obtener la temperatura en la ciudad");
+                    if(temperatura.equals("No se pudo traer la URL de OpenWeatherMaps Con las cordenadas")) return List.of("No se pudo traer la URL de OpenWeatherMaps Con las cordenadas");
+                    if(conector_spotify.peticionGenero(Double.parseDouble(temperatura)).equals("Error al generar la lista de canciones")) return List.of("Error al generar la lista de canciones");
 
                     canciones = String.join("#", conector_spotify.peticionGenero(Double.parseDouble(temperatura)));
                     String ciudadConvertidad = latitud.toString() + " " + longitud.toString();
@@ -72,13 +74,11 @@ public class Consulta {
                     return List.of("Se requiere una ciudad o coordenadas de latitud y longitud");
                 }
             } catch (Exception e) {
-                if(temperatura.equals("Ocurrió un error inesperado al obtener la temperatura")) return List.of("Ocurrió un error inesperado al obtener la temperatura");
-                if(temperatura.equals("Ocurrió un error inesperado al obtener la temperatura en la ciudad")) return List.of("Ocurrió un error inesperado al obtener la temperatura en la ciudad");
+               return List.of("Ocurrió un error inesperado: "+e.getMessage());
             }
-            return List.of("Error al conectartes");
         }
         else {
-            return List.of("Error al conectartes");
+            return List.of("Error al conectartes con los servidores");
         }
     }
 

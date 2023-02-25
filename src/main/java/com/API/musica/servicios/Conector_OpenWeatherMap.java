@@ -46,9 +46,9 @@ public class Conector_OpenWeatherMap {
             URL url = new URL("http://api.openweathermap.org/data/2.5/weather?q=" + ciudad + "&appid="+apiKey);
 
             return getTemperatura(url);
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             LOGGER.debug("No se pudo traer la URL de OpenWeatherMaps con el nombre de la ciudad");
-            throw new RuntimeException(e);
+            return "No se pudo traer la URL de OpenWeatherMaps con el nombre de la ciudad";
         }
     }
 
@@ -58,43 +58,35 @@ public class Conector_OpenWeatherMap {
             URL url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + latitud + "&lon=" + longitud + "&appid="+apiKey);
 
             return getTemperatura(url);
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             LOGGER.debug("No se pudo traer la URL de OpenWeatherMaps Con las cordenadas");
-            throw new RuntimeException(e);
+            return "No se pudo traer la URL de OpenWeatherMaps Con las cordenadas";
         }
     }
 
-    private String getTemperatura(URL url) {
+    private String getTemperatura(URL url) throws JSONException {
         String urlStr = url.toString();
         // Verificar si la solicitud ya está en caché
         if (cache.containsKey(urlStr)) {
             //LOGGER.debug("Obteniendo la temperatura de la caché para: " + urlStr);
             return cache.get(urlStr);
         }
-        try {
-            // Petición a la URL
-            RestTemplate restTemplate = new RestTemplate();
+        // Petición a la URL
+        RestTemplate restTemplate = new RestTemplate();
 
-            // getForObject es uno de los métodos de RestTemplate que permite hacer una solicitud y recibir una respuesta en formato JSON
-            // Obtiene la respuesta de la petición
-            String resultado = restTemplate.getForObject(url.toString(), String.class);
+        // getForObject es uno de los métodos de RestTemplate que permite hacer una solicitud y recibir una respuesta en formato JSON
+        // Obtiene la respuesta de la petición
+        String resultado = restTemplate.getForObject(url.toString(), String.class);
 
-            // Crea el objeto JSON a partir de la variable anterior
-            JSONObject jsonObject = new JSONObject(resultado);
-            JSONObject main = jsonObject.getJSONObject("main");
-            double temperature = main.getDouble("temp"); // Te devuelve la temperatura en grados Kelvin
+        // Crea el objeto JSON a partir de la variable anterior
+        JSONObject jsonObject = new JSONObject(resultado);
+        JSONObject main = jsonObject.getJSONObject("main");
+        double temperature = main.getDouble("temp"); // Te devuelve la temperatura en grados Kelvin
 
-            // Almacenar el resultado en caché
-            cache.put(urlStr, String.valueOf(temperature - 273.15));
+        // Almacenar el resultado en caché
+        cache.put(urlStr, String.valueOf(temperature - 273.15));
 
-            return String.valueOf(temperature - 273.15); // Convertir la temperatura en grados Celsius
-        } catch (JSONException e) {
-            LOGGER.error("Ocurrió un error inesperado al obtener la temperatura: {}", e.getMessage());
-            return "Ocurrió un error inesperado al obtener la temperatura";
-        } catch (RestClientException e) {
-            LOGGER.error("Ocurrió un error inesperado al obtener la temperatura: {}", e.getMessage());
-            return "Ocurrió un error inesperado al obtener la temperatura en la ciudad";
-        }
+        return String.valueOf(temperature - 273.15); // Convertir la temperatura en grados Celsius
     }
 
     @ExceptionHandler(RuntimeException.class)

@@ -86,11 +86,6 @@ public class Conector_Spotify {
     public List<String> peticionGenero(double temperatura) {
         String token = llave_spotify.getToken();
 
-        if(token.equals(" ")) {
-            LOGGER.debug("Error en el token");
-            return List.of("Error en el token");
-        }
-
         genero = "clasica";
 
         if(temperatura > 30) genero = "fiesta";
