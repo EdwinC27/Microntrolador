@@ -1,0 +1,13 @@
+FROM postgres
+
+# Establece el usuario y la contraseña para la base de datos
+ENV POSTGRES_USER postgres
+ENV POSTGRES_PASSWORD postgres
+
+# Crea una nueva base de datos
+ENV POSTGRES_DB canciones
+
+# Copia el archivo SQL para crear la tabla en la imagen
+COPY create_table.sql /docker-entrypoint-initdb.d/
+
+

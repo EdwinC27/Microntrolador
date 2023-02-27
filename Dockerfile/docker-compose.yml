@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  postgres_canciones:
+    image: "edwinc27/postgres-api-rest-canciones:1.0"
+    ports:
+      - 5432:5432
+  app_canciones:
+    image: "edwinc27/api-rest-canciones:1.0"
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres_canciones
