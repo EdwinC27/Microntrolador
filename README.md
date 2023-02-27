@@ -35,3 +35,10 @@ las canciones recomendadas en una base de datos Postgres.
 La ruta para entrar a la aplicacion es:    /api/temperatura/
 
 <img src="https://github.com/EdwinC27/Microcontrolador/blob/main/diagramaSecuencia.png">
+
+
+#### Para acceder a la documentación de OpenAPI, puedes utilizar las siguientes URLs:
+
+>http://localhost:8080/v3/api-docs: esta URL te llevará a la especificación OpenAPI en formato JSON. Aquí podrás encontrar toda la información sobre los endpoints, parámetros, respuestas, y demás detalles de la API.
+
+>http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config: esta URL te llevará a la interfaz de usuario Swagger UI. Esta herramienta te permitirá explorar la documentación de la API de una manera más amigable y visual. Aquí podrás ver una lista de endpoints, sus detalles y también realizar pruebas directamente desde la interfaz.
