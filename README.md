@@ -18,6 +18,8 @@ Además, para usar el código, es necesario modificar el archivo llamado "servic
 
 >urlSpotifyPeticion = valor
 
+>urlOpenWeatherPeticion = valor
+
 Estos datos son necesarios para la autenticación y autorización en las APIs de Spotify y OpenWeatherMap. Asegúrese de tener esta información correcta y actualizada antes de ejecutar el programa.
 
 Es el repositorio se encuentra una carpeta llamada “Base_Datos” que contiene  el archivo “schemaAPI” que contiene el codigo necesario para crear la tabla de la base de datos.
