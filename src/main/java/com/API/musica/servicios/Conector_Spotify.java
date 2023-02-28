@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpEntity;
@@ -35,13 +36,16 @@ public class Conector_Spotify {
 
     public static String genero;
 
+    @Value("${urlSpotifyPeticion}")
+    private String API_URL;
+
     @PostConstruct
     public void iniciarLimpiarCache() {
         spotifyCache.limpiarCache();
     }
 
     public List<String> peticionCanciones(String accessToken, String genero) {
-        String API_URL = "https://api.spotify.com/v1/search?q=genre:" + genero + "&type=track";
+        API_URL += genero;
         String cabezeraConToken = "Bearer " + accessToken;
 
         RestTemplate restTemplate = new RestTemplate();
