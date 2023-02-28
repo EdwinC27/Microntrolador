@@ -90,9 +90,9 @@ public class Conector_Spotify {
     public List<String> peticionGenero(double temperatura) {
         String token = llave_spotify.getToken();
 
-        genero = "clasica";
+        genero = "classical";
 
-        if(temperatura > 30) genero = "fiesta";
+        if(temperatura > 30) genero = "party";
         else if (temperatura >= 15 && temperatura <=30) genero = "pop";
         else if (temperatura >= 10 && temperatura <= 14) genero = "rock";
 
