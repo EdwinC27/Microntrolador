@@ -27,6 +27,9 @@ public class Conector_OpenWeatherMap {
     @Value("${keyOpenWeatherMap}")
     private String apiKey;
 
+    @Value("${urlOpenWeatherPeticion}")
+    private String urlOpenWeatherPeticion;
+
     @Autowired
     OpenWeatherMapCache openWeatherMapCache;
 
@@ -43,7 +46,7 @@ public class Conector_OpenWeatherMap {
     @Retryable(value = {ResourceAccessException.class}, maxAttempts = 3, backoff = @Backoff(delay = 5000))
     public String getURLCiudad(String ciudad) {
         try {
-            URL url = new URL("http://api.openweathermap.org/data/2.5/weather?q=" + ciudad + "&appid="+apiKey);
+            URL url = new URL(urlOpenWeatherPeticion + "q=" + ciudad + "&appid="+apiKey);
 
             return getTemperatura(url);
         } catch (Exception e) {
@@ -55,7 +58,7 @@ public class Conector_OpenWeatherMap {
     @Retryable(value = {ResourceAccessException.class}, maxAttempts = 3, backoff = @Backoff(delay = 5000))
     public String getURLCordenada(double latitud, double longitud) {
         try {
-            URL url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + latitud + "&lon=" + longitud + "&appid="+apiKey);
+            URL url = new URL(urlOpenWeatherPeticion + "lat=" + latitud + "&lon=" + longitud + "&appid="+apiKey);
 
             return getTemperatura(url);
         } catch (Exception e) {
