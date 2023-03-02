@@ -15,6 +15,8 @@ las canciones recomendadas en una base de datos Postgres.
 
 <img src="https://github.com/EdwinC27/Microcontrolador/blob/main/diagramaSecuencia.png">
 
+Para mas informacion de arquitectura acceda a este documento <a href="https://github.com/EdwinC27/Microcontrolador/blob/main/documentacionArquitectura.md">documentacionArquitectura.md</a> 
+
 ### Para acceder a la aplicación, son con las siguientes URLs:
 
 > http://localhost:8080/api/temperatura/?ciudad=
