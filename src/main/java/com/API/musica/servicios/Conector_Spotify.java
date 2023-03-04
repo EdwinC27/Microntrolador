@@ -45,7 +45,7 @@ public class Conector_Spotify {
     }
 
     public List<String> peticionCanciones(String accessToken, String genero) {
-        API_URL += genero;
+        String URL= API_URL + genero;
         String cabezeraConToken = "Bearer " + accessToken;
 
         RestTemplate restTemplate = new RestTemplate();
@@ -63,7 +63,7 @@ public class Conector_Spotify {
             return mostrarCanciones(mapper, response);
         } else {
             // Si los resultados no están en la caché, realiza una solicitud a la API de Spotify
-            String response = restTemplate.exchange(API_URL, HttpMethod.GET, request, String.class, "<album_id>").getBody();
+            String response = restTemplate.exchange(URL, HttpMethod.GET, request, String.class, "<album_id>").getBody();
             cacheResultados.put(cacheKey, response); // Agrega los resultados a la caché
             ObjectMapper mapper = new ObjectMapper();
 
