@@ -8,6 +8,7 @@ import com.API.musica.servicios.Conector_Spotify;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalTime;
-import java.util.List;
 
 import static com.API.musica.servicios.Conector_Spotify.genero;
+import static com.API.musica.servicios.generalJson.erroGenerado;
+import static com.API.musica.servicios.generalJson.infoRegresada;
 
 @RestController
 public class Consulta {
@@ -42,48 +44,48 @@ public class Consulta {
             @ApiResponse(responseCode = "400", description = "Parámetros incorrectos o faltantes"),
             @ApiResponse(responseCode = "500", description = "Error al conectarse con los servicios externos")
     })
-    public List<String> getTemperatura(@RequestParam(value = "ciudad", required = false) String ciudad, @RequestParam(value = "latitud", required = false) Double latitud, @RequestParam(value = "longitud", required = false) Double longitud) {
+    public JSONObject getTemperatura(@RequestParam(value = "ciudad", required = false) String ciudad, @RequestParam(value = "latitud", required = false) Double latitud, @RequestParam(value = "longitud", required = false) Double longitud) {
         ComprobarConexionJava comprobarConexionJava = new ComprobarConexionJava();
 
         if(comprobarConexionJava.conexion()) {
             try {
                 if (ciudad != null) {
                     temperatura = conector_openWeatherMap.getURLCiudad(ciudad);
-                    if(temperatura.equals("No se pudo traer la URL de OpenWeatherMaps con el nombre de la ciudad")) return List.of("No se pudo traer la URL de OpenWeatherMaps con el nombre de la ciudad");
+                    if(temperatura.equals("No se pudo traer la URL de OpenWeatherMaps con el nombre de la ciudad")) return erroGenerado("No se pudo traer la URL de OpenWeatherMaps con el nombre de la ciudad");
 
-                    List<String> resultadoCanciones = conector_spotify.peticionGenero(Double.parseDouble(temperatura));
-                    if(resultadoCanciones.equals("Error al generar la lista de canciones")) return List.of("Error al generar la lista de canciones");
+                    String resultadoCanciones = conector_spotify.peticionGenero(Double.parseDouble(temperatura));
+                    if(resultadoCanciones.equals("Error al generar la lista de canciones")) return erroGenerado("Error al generar la lista de canciones");
 
                     canciones = String.join("#", resultadoCanciones);
 
                     guardarMiEntidad(ciudad);
 
                     LOGGER.debug("Temperatura en " + ciudad + ": " + temperatura + "     Celsius");
-                    return resultadoCanciones;
+                    return infoRegresada(ciudad, temperatura, " " , genero);
 
                 } else if (latitud != null && longitud != null) {
                     temperatura = conector_openWeatherMap.getURLCordenada(latitud, longitud);
-                    if(temperatura.equals("No se pudo traer la URL de OpenWeatherMaps Con las cordenadas")) return List.of("No se pudo traer la URL de OpenWeatherMaps Con las cordenadas");
+                    if(temperatura.equals("No se pudo traer la URL de OpenWeatherMaps Con las cordenadas")) return erroGenerado("No se pudo traer la URL de OpenWeatherMaps Con las cordenadas");
 
-                    List<String> resultadoCanciones = conector_spotify.peticionGenero(Double.parseDouble(temperatura));
-                    if(resultadoCanciones.equals("Error al generar la lista de canciones")) return List.of("Error al generar la lista de canciones");
+                    String resultadoCanciones = conector_spotify.peticionGenero(Double.parseDouble(temperatura));
+                    if(resultadoCanciones.equals("Error al generar la lista de canciones")) return erroGenerado("Error al generar la lista de canciones");
                     canciones = String.join("#", resultadoCanciones);
 
                     String ciudadConvertidad = latitud.toString() + " " + longitud.toString();
                     guardarMiEntidad(ciudadConvertidad);
 
                     LOGGER.debug("Temperatura: " + temperatura + "    Celsius");
-                    return resultadoCanciones;
+                    return infoRegresada(" ", temperatura, ciudadConvertidad , genero);
                 } else {
                     LOGGER.debug("Se requiere una ciudad o coordenadas de latitud y longitud");
-                    return List.of("Se requiere una ciudad o coordenadas de latitud y longitud");
+                    return erroGenerado("Se requiere una ciudad o coordenadas de latitud y longitud");
                 }
             } catch (Exception e) {
-                return List.of("Ocurrió un error inesperado: "+e.getMessage());
+                return erroGenerado("Ocurrió un error inesperado: "+e.getMessage());
             }
         }
         else {
-            return List.of("Error al conectartes con los servidores");
+            return erroGenerado("Error al conectartes con los servidores");
         }
     }
 

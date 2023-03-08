@@ -16,10 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @EnableScheduling
@@ -35,7 +32,9 @@ public class Conector_Spotify {
     private Map<String, String> cacheResultados = new HashMap<>();
 
     public static String genero;
-
+    public static List<String> songNameArreglo = new ArrayList<>();
+    public static List<String> artistNameArreglo = new ArrayList<>();
+    public static List<String> albumNameArreglo = new ArrayList<>();
     @Value("${urlSpotifyPeticion}")
     private String API_URL;
 
@@ -44,7 +43,7 @@ public class Conector_Spotify {
         spotifyCache.limpiarCache();
     }
 
-    public List<String> peticionCanciones(String accessToken, String genero) {
+    public String peticionCanciones(String accessToken, String genero) {
         String URL= API_URL + genero;
         String cabezeraConToken = "Bearer " + accessToken;
 
@@ -60,34 +59,54 @@ public class Conector_Spotify {
             String response = cacheResultados.get(cacheKey);
             ObjectMapper mapper = new ObjectMapper();
 
-            return mostrarCanciones(mapper, response);
+            return mostrarInfo(mapper, response);
         } else {
             // Si los resultados no están en la caché, realiza una solicitud a la API de Spotify
             String response = restTemplate.exchange(URL, HttpMethod.GET, request, String.class, "<album_id>").getBody();
             cacheResultados.put(cacheKey, response); // Agrega los resultados a la caché
             ObjectMapper mapper = new ObjectMapper();
 
-            return mostrarCanciones(mapper, response);
+            return mostrarInfo(mapper, response);
         }
     }
 
-    public List<String> mostrarCanciones(ObjectMapper mapper, String response) {
-        List<String> name = new ArrayList<>();
+    public String mostrarInfo(ObjectMapper mapper, String response) {
         try {
             JsonNode root = mapper.readTree(response);
             JsonNode itemsNode = root.path("tracks").path("items");
             for (JsonNode item : itemsNode) {
-                JsonNode nameNode = item.path("name");
-                name.add(nameNode.asText());
+                encontrarCanciones(item);
+
+                JsonNode artistsNode = item.get("artists");
+                encontrarArtistas(artistsNode);
+
+                encontrarAlbunes(item);
             }
-            return name;
+            return "ok";
         } catch (IOException e) {
-            e.printStackTrace();
-            return List.of("Error al generar la lista de canciones");
+            return "Error al generar la lista de canciones";
         }
     }
 
-    public List<String> peticionGenero(double temperatura) {
+    public static void encontrarAlbunes(JsonNode item) {
+        JsonNode albumNode = item.get("album");
+        JsonNode albumNameNode = albumNode.get("name");
+        albumNameArreglo.add(albumNameNode.asText());
+    }
+
+    public static void encontrarCanciones(JsonNode item) {
+        JsonNode nameNode = item.get("name");
+        songNameArreglo.add(nameNode.asText());
+    }
+
+    public static void encontrarArtistas(JsonNode artistsNode) {
+        for (JsonNode artist : artistsNode) {
+            JsonNode artistNameNode = artist.get("name");
+            artistNameArreglo.add(artistNameNode.asText());
+        }
+    }
+
+    public String peticionGenero(double temperatura) {
         String token = llave_spotify.getToken();
 
         genero = "classical";
