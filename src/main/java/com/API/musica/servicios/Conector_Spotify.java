@@ -82,7 +82,7 @@ public class Conector_Spotify {
 
                 encontrarAlbunes(item);
             }
-            return "ok";
+            return informacionAgrupada();
         } catch (IOException e) {
             return "Error al generar la lista de canciones";
         }
@@ -104,6 +104,20 @@ public class Conector_Spotify {
             JsonNode artistNameNode = artist.get("name");
             artistNameArreglo.add(artistNameNode.asText());
         }
+    }
+
+    public static String informacionAgrupada(){
+        StringBuilder sb = new StringBuilder();
+
+        for(int interador=0; interador<albumNameArreglo.size(); interador++) {
+            sb.append(artistNameArreglo.get(interador));
+            sb.append(" - ");
+            sb.append(albumNameArreglo.get(interador));
+            sb.append(" - ");
+            sb.append(songNameArreglo.get(interador));
+            sb.append("     ---     ");
+        }
+        return sb.toString();
     }
 
     public String peticionGenero(double temperatura) {
