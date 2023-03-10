@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.API.musica.componentes.User;
+import com.API.musica.repositorios.RepositorioUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -21,16 +23,31 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Consulta.class);
+    @Autowired
+    private RepositorioUser usuarioRepository;
 
     @Value("${keySecret}")
     public String key;
 
     @PostMapping("user")
     public User login(@RequestBody User consultaUser) {
-        String token = getJWTToken(consultaUser.getUser());
-        consultaUser.setToken(token);
+        if (existeUsuario(consultaUser.getUserName())) {
+            String token = getJWTToken(consultaUser.getUserName());
+            consultaUser.setToken(token);
 
-        return consultaUser;
+            guardarMitoken(consultaUser.getUserName(), consultaUser.getPassword(), token);
+
+            return consultaUser;
+
+        } else {
+            consultaUser.setToken("Error el usuario no existe");
+            return consultaUser;
+        }
+    }
+
+    public boolean existeUsuario(String nombreUsuario) {
+        User usuario = usuarioRepository.findByuserName(nombreUsuario);
+        return usuario != null;
     }
 
     private String getJWTToken(String username) {
@@ -51,5 +68,13 @@ public class UserController {
                         key.getBytes()).compact();
 
         return token;
+    }
+
+    public void guardarMitoken(String userName, String password, String token) {
+        User userGuardar = new User();
+        userGuardar.setUserName(userName);
+        userGuardar.setPassword(password);
+        userGuardar.setToken(token);
+        usuarioRepository.save(userGuardar);
     }
 }

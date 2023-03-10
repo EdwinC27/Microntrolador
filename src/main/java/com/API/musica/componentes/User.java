@@ -1,18 +1,25 @@
 package com.API.musica.componentes;
 
-import org.springframework.stereotype.Component;
+import javax.persistence.*;
 
-@Component
+@Entity
+@Table(name = "users")
 public class User {
-    String user;
+    @Id
+    @Column(name = "users")
+    @Basic
+    String userName;
+    @Basic
+    String password;
+    @Basic
     String token;
 
-    public String getUser() {
-        return user;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getToken() {
@@ -21,5 +28,13 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
