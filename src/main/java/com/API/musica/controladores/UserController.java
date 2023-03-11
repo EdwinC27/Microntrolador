@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.API.musica.componentes.User;
+import com.API.musica.entidades.User;
 import com.API.musica.repositorios.RepositorioUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

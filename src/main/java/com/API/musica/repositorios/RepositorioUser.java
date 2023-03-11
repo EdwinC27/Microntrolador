@@ -1,6 +1,6 @@
 package com.API.musica.repositorios;
 
-import com.API.musica.componentes.User;
+import com.API.musica.entidades.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

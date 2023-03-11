@@ -1,4 +1,4 @@
-package com.API.musica.componentes;
+package com.API.musica.entidades;
 
 import javax.persistence.*;
 
