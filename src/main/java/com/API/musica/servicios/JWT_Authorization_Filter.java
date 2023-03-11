@@ -27,7 +27,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 
 @Service
-public class JWTAuthorizationFilter extends OncePerRequestFilter {
+public class JWT_Authorization_Filter extends OncePerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(Consulta.class);
 
     private final String PREFIX = "Bearer ";

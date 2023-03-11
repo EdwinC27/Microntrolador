@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import static com.API.musica.servicios.Conector_Spotify.*;
 
 @Service
-public class generalJson {
+public class General_Json {
 
     public static JSONObject infoRegresada(String city, String temperatura, String cordenadas, String  nombrePlaylist) {
         JSONObject jsonObject = new JSONObject();
