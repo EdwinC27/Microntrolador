@@ -1,13 +1,27 @@
 # Servicio de sugerencias de canciones por temperatura
 Este servicio web implementa una API RESTful que acepta solicitudes que contienen el nombre de la ciudad o las coordenadas de longitud y latitud como parámetros, y devuelve una lista de reproducción de Spotify con canciones que se ajustan a la temperatura de la ubicación.
 
-
 ## Uso de la aplicación: 
 Este servicio utiliza las APIs de OpenWeatherMap y Spotify para obtener la temperatura actual de la ubicación especificada y las canciones recomendadas basadas en la temperatura. Los datos se almacenan en caché para reducir las solicitudes a las APIs. Los datos de OpenWeatherMap se actualizan cada 3 minutos y se almacenan en caché durante ese período, mientras que los datos de Spotify se actualizan cada 12 horas y se almacenan en caché durante ese tiempo. Después de obtener los datos de ambas APIs, se guarda la información relevante, como la hora de la solicitud, el género musical, la ciudad y las canciones recomendadas en una base de datos PostgreSQL.
 
 <img src="https://github.com/EdwinC27/Microcontrolador/blob/main/diagramaSecuencia.png">
 
 Para mas informacion de arquitectura acceda a este documento <a href="https://github.com/EdwinC27/Microcontrolador/blob/main/documentacionArquitectura.md">documentacionArquitectura.md</a> 
+
+
+### Token
+Para poder utilizar este servicio, es necesario contar con un token de acceso. Para obtenerlo, debes enviar tus credenciales de usuario y contraseña a la siguiente dirección URL:
+> http://localhost:8080/user
+
+El token generado debe ser incluido en la cabezera de cada una de las peticiones que realices a las URLs correspondientes. Para ello, debes enviar el token junto con la solicitud correspondiente. Es importante mencionar que el token tiene una duración limitada y deberás obtener uno nuevo una vez que expire.
+
+Para enviar tus credenciales, debes incluir un objeto JSON con el nombre de usuario y la contraseña en el cuerpo de la solicitud, como se muestra a continuación:
+``` 
+{
+    "userName" : "user",
+    "password" : "password"
+}
+```
 
 ### Para utilizar el servicio, se pueden enviar solicitudes a través de dos URLs:
 
@@ -24,7 +38,7 @@ Para mas informacion de arquitectura acceda a este documento <a href="https://gi
 ## Requisitos:
 - Para poder utilizar este programa, es necesario que su sistema operativo tenga instalado Java 11 o una versión más reciente. Si no cuenta con Java, puede descargar e instalar la versión correspondiente, por ejemplo desde la página de: https://adoptium.net/temurin/releases/.
 
-- Es imprescindible contar con una base de datos PostgreSQL, en la carpeta **Base_Datos** esta el archivo <a href="https://github.com/EdwinC27/Microcontrolador/blob/main/Base_Datos/schemaAPI.sql">schemaAPIl.sql</a> con los comandos para crear la tabla correspondiente. 
+- Es imprescindible contar con una base de datos PostgreSQL, en la carpeta **Base_Datos** esta el archivo <a href="https://github.com/EdwinC27/Microcontrolador/blob/main/Base_Datos/schemaAPI.sql">schemaAPIl.sql</a> con los comandos para crear las tablas correspondientes. 
 
 - Cambia el usuario y contraseña al igual que el nombre de la base de datos en el archivo <a href="https://github.com/EdwinC27/Microcontrolador/blob/main/src/main/resources/application-dev.properties">application-dev.properties</a> que esta en la ruta **src/main/resources**.
 
@@ -39,7 +53,7 @@ Para utilizar este proyecto, se pueden seguir una las siguientes instrucciones:
 ### Descarga el proyecto comprimido en .zip
 1. Descarga el proyecto en formato .zip desde la opción "Code" de este repositorio.
 2. Una vez descargado, descomprime el archivo y abre la carpeta del proyecto.
-3. Modifica el archivo **service.properties** que se encuentra en la ruta **src/main/resources**, agregando los datos necesarios para la autenticación hacia las APIs que vayas a utilizar. Debes poner tus propios datos de autenticación y las URLs necesarias.
+3. Modifica el archivo **service.properties** que se encuentra en la ruta **src/main/resources**, agregando los datos necesarios para la autenticación hacia las APIs que vayas a utilizar. Debes poner tus propios datos de autenticación y las URLs necesarias. Al igual que el valor **keySecret** con un valor para encriptar.
 4. Implementar la base de datos postgresql corespondiente 
    - Puedes cambiar el nombre de la base de datos.
    - En el directorio **Base_Datos** hay un archivo llamado **schemaAPI.sql** con los comandos para crear la tabla necesaria, (esta tabla se debe de llamar igual)
@@ -49,7 +63,6 @@ Para utilizar este proyecto, se pueden seguir una las siguientes instrucciones:
      ```
      Este comando iniciará la aplicación utilizando Maven y Spring Boot. Una vez que la aplicación esté corriendo, podrás comenzar a utilizarla.
      
-  
 
 ### Clona el repositorio
 1. Clona el repositorio de Git en tu PC con el siguiente comando:
@@ -57,7 +70,7 @@ Para utilizar este proyecto, se pueden seguir una las siguientes instrucciones:
        git clone git@github.com:EdwinC27/Microcontrolador.git  
     ```
 2. Una vez descargado, abre la carpeta del proyecto
-3. Modifica el archivo **service.properties** que se encuentra en la ruta **src/main/resources**, agregando los datos necesarios para la autenticación hacia las APIs que vayas a utilizar. Debes poner tus propios datos de autenticación y las URLs necesarias.
+3. Modifica el archivo **service.properties** que se encuentra en la ruta **src/main/resources**, agregando los datos necesarios para la autenticación hacia las APIs que vayas a utilizar. Debes poner tus propios datos de autenticación y las URLs necesarias. Al igual que el valor **keySecret** con un valor para encriptar.
 4. Implementar la base de datos postgresql corespondiente 
    - Puedes cambiar el nombre de la base de datos.
    - En el directorio **Base_Datos** hay un archivo llamado **schemaAPI.sql** con los comandos para crear la tabla necesaria, (esta tabla se debe de llamar igual)
