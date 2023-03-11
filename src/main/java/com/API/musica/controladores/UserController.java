@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import static com.API.musica.configuracion.PasswordUtils.verifyPassword;
+
 @RestController
 public class UserController {
 
@@ -35,7 +37,7 @@ public class UserController {
             String token = getJWTToken(consultaUser.getUserName());
             consultaUser.setToken(token);
 
-            guardarMitoken(consultaUser.getUserName(), consultaUser.getPassword(), token);
+            guardarMitoken(consultaUser.getUserName(), token);
 
             return consultaUser;
 
@@ -53,8 +55,7 @@ public class UserController {
         LOGGER.debug("passwordJson: "+userJson.getPassword());
         LOGGER.debug("PasswordBD: "+usuarioBaseDatos.getPassword());
 
-        return (userJson.getUserName().equals(usuarioBaseDatos.getUserName())) &&
-        (userJson.getPassword().equals(usuarioBaseDatos.getPassword()));
+        return verifyPassword(userJson.getPassword(), usuarioBaseDatos.getPassword());
     }
 
     private String getJWTToken(String username) {
@@ -77,10 +78,8 @@ public class UserController {
         return token;
     }
 
-    public void guardarMitoken(String userName, String password, String token) {
-        User userGuardar = new User();
-        userGuardar.setUserName(userName);
-        userGuardar.setPassword(password);
+    public void guardarMitoken(String userName, String token) {
+        User userGuardar = usuarioRepository.findByuserName(userName);
         userGuardar.setToken(token);
         usuarioRepository.save(userGuardar);
     }
