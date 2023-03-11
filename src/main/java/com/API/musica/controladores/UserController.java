@@ -51,20 +51,24 @@ public class UserController {
             return consultaUser;
 
         } else {
-            consultaUser.setToken("Error el usuario no existe");
+            consultaUser.setToken("Error usuario o contraseña incorrecta");
             return consultaUser;
         }
     }
 
     public boolean validarUsuario(User userJson) {
-        User usuarioBaseDatos = usuarioRepository.findByuserName(userJson.getUserName());
+        try {
+            User usuarioBaseDatos = usuarioRepository.findByuserName(userJson.getUserName());
 
-        LOGGER.debug("userJson: "+userJson.getUserName());
-        LOGGER.debug("usuarioBaseDatos: "+usuarioBaseDatos.getUserName());
-        LOGGER.debug("passwordJson: "+userJson.getPassword());
-        LOGGER.debug("PasswordBD: "+usuarioBaseDatos.getPassword());
+            LOGGER.debug("userJson: " + userJson.getUserName());
+            LOGGER.debug("usuarioBaseDatos: " + usuarioBaseDatos.getUserName());
+            LOGGER.debug("passwordJson: " + userJson.getPassword());
+            LOGGER.debug("PasswordBD: " + usuarioBaseDatos.getPassword());
 
-        return verifyPassword(userJson.getPassword(), usuarioBaseDatos.getPassword());
+            return verifyPassword(userJson.getPassword(), usuarioBaseDatos.getPassword());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private String getJWTToken(String username) {
