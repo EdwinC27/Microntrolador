@@ -31,7 +31,7 @@ public class UserController {
 
     @PostMapping("user")
     public User login(@RequestBody User consultaUser) {
-        if (existeUsuario(consultaUser.getUserName())) {
+        if (validarUsuario(consultaUser)) {
             String token = getJWTToken(consultaUser.getUserName());
             consultaUser.setToken(token);
 
@@ -45,9 +45,16 @@ public class UserController {
         }
     }
 
-    public boolean existeUsuario(String nombreUsuario) {
-        User usuario = usuarioRepository.findByuserName(nombreUsuario);
-        return usuario != null;
+    public boolean validarUsuario(User userJson) {
+        User usuarioBaseDatos = usuarioRepository.findByuserName(userJson.getUserName());
+
+        LOGGER.debug("userJson: "+userJson.getUserName());
+        LOGGER.debug("usuarioBaseDatos: "+usuarioBaseDatos.getUserName());
+        LOGGER.debug("passwordJson: "+userJson.getPassword());
+        LOGGER.debug("PasswordBD: "+usuarioBaseDatos.getPassword());
+
+        return (userJson.getUserName().equals(usuarioBaseDatos.getUserName())) &&
+        (userJson.getPassword().equals(usuarioBaseDatos.getPassword()));
     }
 
     private String getJWTToken(String username) {
