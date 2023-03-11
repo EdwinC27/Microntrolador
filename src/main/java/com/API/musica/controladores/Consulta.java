@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalTime;
 
 import static com.API.musica.servicios.Conector_Spotify.genero;
-import static com.API.musica.servicios.generalJson.erroGenerado;
-import static com.API.musica.servicios.generalJson.infoRegresada;
+import static com.API.musica.servicios.General_Json.erroGenerado;
+import static com.API.musica.servicios.General_Json.infoRegresada;
 
 @RestController
 public class Consulta {

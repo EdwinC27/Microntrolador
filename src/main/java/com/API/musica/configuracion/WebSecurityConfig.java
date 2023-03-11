@@ -1,6 +1,6 @@
 package com.API.musica.configuracion;
 
-import com.API.musica.servicios.JWTAuthorizationFilter;
+import com.API.musica.servicios.JWT_Authorization_Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,8 +13,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
-    public JWTAuthorizationFilter jwtAuthorizationFilter() {
-        return new JWTAuthorizationFilter();
+    public JWT_Authorization_Filter jwtAuthorizationFilter() {
+        return new JWT_Authorization_Filter();
     }
 
     @Override
