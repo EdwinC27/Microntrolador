@@ -1,60 +1,45 @@
 # Documentación         
  
-
+ 
 ## Paquete “servicios”
+* La implementación del Conector_OpenWeatherMap se utiliza para obtener la temperatura actual de una ciudad o coordenadas geográficas mediante la conexión a la API de OpenWeatherMap. Tiene dos métodos principales, "getURLCiudad" y "getURLCordenada", que se intentan ejecutar hasta un máximo de 3 veces. También utiliza caché para evitar solicitudes repetitivas y dos variables de instancia para contener la clave de API y la URL base para hacer las solicitudes.
 
-Las tres clases describen diferentes implementaciones de servicios que utilizan APIs para obtener información de
-OpenWeatherMap y Spotify. OpenWeatherMap es utilizado para obtener la temperatura actual de una ubicación especifica,
-mientras que Spotify se utiliza para obtener canciones basadas en la temperatura y el género musical.
+* La implementación de Llave_Spotify obtiene un token de acceso mediante la autenticación de un cliente con sus credenciales. Verifica si el token actual está vigente para obtener uno nuevo si es necesario. El método principal de la clase es "getToken()". También utiliza RestTemplate para realizar una solicitud HTTP POST a la URL de autorización de Spotify.
 
-La implementación de OpenWeatherMap utiliza un servicio en Java que se conecta a la API para obtener la temperatura 
-actual de una ubicación y la almacena en un mapa para evitar solicitudes repetidas a la API.
+* La implementación de Conector_Spotify utiliza métodos para hacer peticiones a la API de Spotify y devuelve resultados basados en la temperatura y el género musical. También utiliza una instancia de la clase Llave_Spotify para obtener un token de acceso a la API. Contiene métodos para procesar la respuesta de la API y extraer información de las canciones.
 
-La implementación de Llave_Spotify utiliza una clase que obtiene un token de acceso mediante la autenticación de un 
-cliente con sus credenciales y verifica si el token actual está vigente para obtener un nuevo token si es necesario.
+* La implementación de General_Json tiene dos métodos. El primer método, infoRegresada, crea un objeto JSON y agrega información de la ciudad y su temperatura, coordenadas y nombre de la playlist en un objeto JSON cityLista. También agrega información de las canciones en un array JSON songsListas. El segundo método, erroGenerado, crea un objeto JSON que contiene información sobre el error que ocurrió.
 
-Por último, la implementación de Conector_Spotify utiliza métodos para hacer peticiones a la API de Spotify y devuelve 
-resultados basados en la temperatura y el género musical. También utiliza una instancia de la clase Llave_Spotify para 
-obtener un token de acceso a la API.
+* La implementación de JWT_Authorization_Filter es una clase Java que implementa un filtro de autorización JWT para proteger los endpoints de una aplicación web. Extiende de la clase OncePerRequestFilter y utiliza una clave secreta para validar y decodificar los tokens JWT.
 
-En resumen, las dos clases anteriores describen diferentes implementaciones de servicios que utilizan APIs para obtener 
-información de OpenWeatherMap y Spotify, y que están diseñados para mejorar el rendimiento y la eficiencia en el acceso
-a la información requerida.
 
 
 ## Paquete “controladores”
-Esta clase define un controlador REST API en Spring Boot que expone una ruta '/api/temperatura' a través del método GET.
-Los parámetros de consulta son 'ciudad' o latitud' y 'longitud' se pueden pasar a esta ruta para recuperar la temperatura 
-actual de la ubicación deseada. La anotación '@RestController' indica que este controlador procesa solicitudes HTTP y
-devuelve una respuesta HTTP.
+* La implementación de Consulta es un código que define un controlador REST para obtener la temperatura y canciones recomendadas para una ciudad o coordenadas geográficas. El controlador "Consulta" está anotado con "@RestController", y tiene tres campos autowired: "Conector_OpenWeatherMap", "RepositorioListaMusica" y "Conector_Spotify". El método "getTemperatura" es un controlador REST anotado con "@GetMapping" y accesible en la ruta "/api/temperatura". Toma tres parámetros opcionales ("ciudad", "latitud" y "longitud") y devuelve un objeto JSON con información sobre la temperatura y las canciones recomendadas. El método verifica la conexión a Internet y, si es exitosa, determina si se proporciona una ciudad o coordenadas geográficas. Si se proporciona una ciudad, obtiene la temperatura de la ciudad usando "getURLCiudad" del objeto "Conector_OpenWeatherMap", y luego genera una lista de canciones recomendadas para la temperatura con "peticionGenero" del objeto "Conector_Spotify". El método también guarda la información de la ciudad en una base de datos. Si se proporcionan coordenadas geográficas, realiza los mismos pasos. El método "guardarMiEntidad" guarda la información de la temperatura, la ciudad y las canciones recomendadas en un objeto "ListaMusica" que se guarda en la base de datos utilizando el objeto "RepositorioListaMusica".
 
-El método 'getTemperatura' es responsable de procesar los parámetros de consulta y recuperar la temperatura. Si se proporciona
-el parámetro 'ciudad', se llama al método 'getURLCiudad' de la clase 'Conector_OpenWeatherMap' para recuperar la temperatura 
-actual de la ciudad especificada o por otro lado si se proporciona los parámetros ‘latitud’ y ‘longitud’ se llama al método 
-‘getURLCordenada’ de la clase 'Conector_OpenWeatherMap' para recuperar la temperatura actual de las coordenadas especificadas.
+* La implementación de UserController es una clase Java que maneja la lógica de un controlador REST para el manejo de usuarios. El controlador recibe solicitudes POST a la ruta "/user" con el método "login" y el objeto JSON "User" en el cuerpo de la solicitud. El método "login" verifica si el usuario existe en la base de datos y, si es así, genera un token JWT utilizando "getJWTToken". El método "guardarMitoken" guarda el token generado en la base de datos para el usuario correspondiente. El controlador devuelve un objeto JSON "User" con el token generado y el estado de la operación. En resumen, estos controladores son responsables de proporcionar información de temperatura y canciones recomendadas, y manejar la autenticación de usuarios con tokens JWT para acceder a recursos protegidos en una aplicación web.
 
-Una vez que se recupera la temperatura, se llama al método 'peticionGenero' de la clase 'Conector_Spotify'. Esta clase proporciona 
-un cliente para acceder al servicio web de Spotify y buscar canciones basadas en el género de música que corresponde a la temperatura
-recuperada. El género se determina mediante un algoritmo específico que utiliza la temperatura como entrada.
-
-Este controlador utiliza el caché de respuestas de las API OpenWeatherMap y Spotify. Posteriormente guarda los datos generados en la base de datos.
 
 
 ## Paquete “configuraciones” 
-Este código define tres clases, dos de ellas se encargan de mantener en caché los resultados de las consultas a diferentes APIs para evitar 
-hacer solicitudes innecesarias.
+* La implementación de ComprobarConexionJava tiene un método llamado "conexion()" que devuelve un booleano indicando si hay o no conexión a Internet. Este método crea un objeto Socket para intentar conectarse a un servidor en la dirección web y puerto especificados. Si la conexión es exitosa, devuelve "true", de lo contrario, devuelve "false".
 
-La primera clase, llamada OpenWeatherMapCache, define un atributo 'cacheResultados' que es un Map que almacena las temperaturas para cada 
-ciudad y la clave es el nombre de la ciudad. Además, la clase utiliza la anotación @Scheduled para ejecutar una tarea periódica cada 3 minutos.
+* La implementación de OpenWeatherMapCache es un componente de Spring que usa la anotación @Component y @EnableScheduling para programar tareas en la aplicación. Esta clase maneja una caché de resultados obtenidos de la API de OpenWeatherMap. El método limpiarCache se ejecuta cada 3 minutos para borrar los resultados antiguos y asegurarse de que se obtengan los resultados más recientes de la API.
 
-La segunda clase, llamada SpotifyCache, también define un atributo 'cacheResultados'que es un Map que almacena los resultados de las consultas a
-la API de Spotify para cada canción y la clave es el nombre de la canción. Al igual que en la clase anterior, se utiliza la anotación @Scheduled 
-para ejecutar una tarea periódica cada 12 horas. 
+* La implementación de PasswordUtils tiene dos métodos estáticos para trabajar con contraseñas. El método verifyPassword verifica si una contraseña en texto plano es igual a una contraseña almacenada en la base de datos en forma de hash. El método hashPasswordJson convierte una contraseña en texto plano en un hash SHA-256 en forma de cadena. Ambos métodos se pueden invocar directamente desde la clase PasswordUtils sin la necesidad de crear una instancia de la clase. La clase está anotada con @Configuration y se puede utilizar en el contexto de una aplicación Spring.
 
-En resumen, ambas clases implementan la técnica de caché para reducir el número de solicitudes a las APIs y mejorar el rendimiento de la aplicación.
-La última clase llamada “ComprobarConexionJava” se encarga de verificar si el dispositivo tiene conexión a internet.
+* La implementación de SpotifyCache es un componente de Spring que usa la anotación @EnableScheduling para programar tareas en la aplicación. Esta clase maneja una caché de resultados obtenidos de Spotify. El método limpiarCache se ejecuta cada 12 horas para borrar los resultados antiguos y asegurarse de que los resultados almacenados en caché no ocupen espacio innecesario en la memoria.
+
+* La implementación de WebSecurityConfig es una configuración de seguridad para una aplicación web que utiliza Spring Security. La anotación @EnableWebSecurity se utiliza para habilitar la seguridad web en la aplicación. Esta clase extiende WebSecurityConfigurerAdapter y sobrescribe métodos para personalizar la configuración de seguridad. El método jwtAuthorizationFilter define un filtro personalizado para autenticar y autorizar a los usuarios en función de un token JWT. El método configure se utiliza para configurar la seguridad de la aplicación, incluyendo la protección CSRF y la autenticación de usuarios.
 
 
 
 ## Paquete “entidades”
-La clase “ListaMusica” se encarga de de instanciar los campos que tiene la base de datos al igual que el nombre de la misma.
+* La implementación de ListaMusica se encarga de de instanciar los campos que tiene la tabla **informacion_generada**.
+* La implementación de User se encarga de de instanciar los campos que tiene la tabla **users**.
+
+
+
+## Paquete “repositorios”
+* La implementación de RepositorioListaMusica define una interfaz que extiende la interfaz JpaRepository de Spring Data JPA y se utiliza para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en la tabla de base de datos correspondiente a la entidad "ListaMusica".
+* La implementación de RepositorioUser define una interfaz que extiende la interfaz JpaRepository de Spring Data JPA y se utiliza para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en la tabla de base de datos correspondiente a la entidad "User".
