@@ -34,6 +34,9 @@ public class UserController {
     @Value("${keySecret}")
     public String key;
 
+    @Value("${setIdEncriptacion}")
+    private String setId;
+
     @PostMapping("user")
     @Operation(summary = "Obtener token necesario")
     @ApiResponses(value = {
@@ -77,7 +80,7 @@ public class UserController {
 
         String token = Jwts
                 .builder()
-                .setId("edwinAPI")
+                .setId(setId)
                 .setSubject(username)
                 .claim("authorities",
                         grantedAuthorities.stream()
