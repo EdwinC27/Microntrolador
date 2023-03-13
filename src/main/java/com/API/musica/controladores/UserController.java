@@ -75,6 +75,8 @@ public class UserController {
     }
 
     private String getJWTToken(String username) {
+        long MILISEGUNDO_HORA = 3_600_000;
+
         List<GrantedAuthority> grantedAuthorities = AuthorityUtils
                 .commaSeparatedStringToAuthorityList("ROLE_USER");
 
@@ -87,7 +89,7 @@ public class UserController {
                                 .map(GrantedAuthority::getAuthority)
                                 .collect(Collectors.toList()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 600000))
+                .setExpiration(new Date(System.currentTimeMillis() + MILISEGUNDO_HORA))
                 .signWith(SignatureAlgorithm.HS512,
                         key.getBytes()).compact();
 
