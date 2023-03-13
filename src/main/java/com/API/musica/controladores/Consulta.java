@@ -5,6 +5,7 @@ import com.API.musica.entidades.ListaMusica;
 import com.API.musica.repositorios.RepositorioListaMusica;
 import com.API.musica.servicios.Conector_OpenWeatherMap;
 import com.API.musica.servicios.Conector_Spotify;
+import com.API.musica.servicios.General_Json;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -18,15 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalTime;
 
-import static com.API.musica.servicios.Conector_Spotify.genero;
 import static com.API.musica.servicios.General_Json.erroGenerado;
-import static com.API.musica.servicios.General_Json.infoRegresada;
 
 @RestController
 public class Consulta {
     private static final Logger LOGGER = LoggerFactory.getLogger(Consulta.class);
     @Autowired
     Conector_OpenWeatherMap conector_openWeatherMap;
+
+    @Autowired
+    General_Json generalJson;
 
     @Autowired
     RepositorioListaMusica repositorioListaMusica;
@@ -61,7 +63,7 @@ public class Consulta {
                     guardarMiEntidad(ciudad);
 
                     LOGGER.debug("Temperatura en " + ciudad + ": " + temperatura + "     Celsius");
-                    return infoRegresada(ciudad, temperatura, " " , genero);
+                    return generalJson.infoRegresada(ciudad, temperatura, " " , conector_spotify.genero);
 
                 } else if (latitud != null && longitud != null) {
                     temperatura = conector_openWeatherMap.getURLCordenada(latitud, longitud);
@@ -75,7 +77,7 @@ public class Consulta {
                     guardarMiEntidad(ciudadConvertidad);
 
                     LOGGER.debug("Temperatura: " + temperatura + "    Celsius");
-                    return infoRegresada(" ", temperatura, ciudadConvertidad , genero);
+                    return generalJson.infoRegresada(" ", temperatura, ciudadConvertidad , conector_spotify.genero);
                 } else {
                     LOGGER.debug("Se requiere una ciudad o coordenadas de latitud y longitud");
                     return erroGenerado("Se requiere una ciudad o coordenadas de latitud y longitud");
@@ -93,7 +95,7 @@ public class Consulta {
         LocalTime horaActual = LocalTime.now();
         ListaMusica listaMusica = new ListaMusica();
         listaMusica.setHora(String.valueOf(horaActual));
-        listaMusica.setGenero(genero);
+        listaMusica.setGenero(conector_spotify.genero);
         listaMusica.setCiudad(ciudad);
         listaMusica.setClima(String.valueOf(temperatura));
         listaMusica.setCanciones(canciones);

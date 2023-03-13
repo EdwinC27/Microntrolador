@@ -31,10 +31,10 @@ public class Conector_Spotify {
 
     private Map<String, String> cacheResultados = new HashMap<>();
 
-    public static String genero;
-    public static List<String> songNameArreglo = new ArrayList<>();
-    public static List<String> artistNameArreglo = new ArrayList<>();
-    public static List<String> albumNameArreglo = new ArrayList<>();
+    public String genero;
+    public List<String> songNameArreglo;
+    public List<String> artistNameArreglo;
+    public List<String> albumNameArreglo;
     @Value("${urlSpotifyPeticion}")
     private String API_URL;
 
@@ -58,20 +58,20 @@ public class Conector_Spotify {
         if (cacheResultados.containsKey(cacheKey)) {
             String response = cacheResultados.get(cacheKey);
             ObjectMapper mapper = new ObjectMapper();
-
-            return mostrarInfo(mapper, response);
+            return  mostrarInfo(mapper, response);
         } else {
             // Si los resultados no están en la caché, realiza una solicitud a la API de Spotify
             String response = restTemplate.exchange(URL, HttpMethod.GET, request, String.class, "<album_id>").getBody();
             cacheResultados.put(cacheKey, response); // Agrega los resultados a la caché
             ObjectMapper mapper = new ObjectMapper();
-
-            return mostrarInfo(mapper, response);
+            return  mostrarInfo(mapper, response);
         }
     }
 
     public String mostrarInfo(ObjectMapper mapper, String response) {
         try {
+            limpiarArreglosInfoGeneral();
+
             JsonNode root = mapper.readTree(response);
             JsonNode itemsNode = root.path("tracks").path("items");
             for (JsonNode item : itemsNode) {
@@ -88,25 +88,25 @@ public class Conector_Spotify {
         }
     }
 
-    public static void encontrarAlbunes(JsonNode item) {
+    public void encontrarAlbunes(JsonNode item) {
         JsonNode albumNode = item.get("album");
         JsonNode albumNameNode = albumNode.get("name");
         albumNameArreglo.add(albumNameNode.asText());
     }
 
-    public static void encontrarCanciones(JsonNode item) {
+    public void encontrarCanciones(JsonNode item) {
         JsonNode nameNode = item.get("name");
         songNameArreglo.add(nameNode.asText());
     }
 
-    public static void encontrarArtistas(JsonNode artistsNode) {
+    public void encontrarArtistas(JsonNode artistsNode) {
         for (JsonNode artist : artistsNode) {
             JsonNode artistNameNode = artist.get("name");
             artistNameArreglo.add(artistNameNode.asText());
         }
     }
 
-    public static String informacionAgrupada(){
+    public String informacionAgrupada(){
         StringBuilder sb = new StringBuilder();
 
         for(int interador=0; interador<albumNameArreglo.size(); interador++) {
@@ -130,5 +130,11 @@ public class Conector_Spotify {
         else if (temperatura >= 10 && temperatura <= 14) genero = "rock";
 
         return peticionCanciones(token, genero);
+    }
+
+    public void limpiarArreglosInfoGeneral() {
+        songNameArreglo = new ArrayList<>();
+        artistNameArreglo = new ArrayList<>();
+        albumNameArreglo = new ArrayList<>();
     }
 }
