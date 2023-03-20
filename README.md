@@ -1,5 +1,5 @@
 # Servicio de sugerencias de canciones por temperatura
-Este servicio web implementa una API RESTful que acepta solicitudes que contienen el nombre de la ciudad o las coordenadas de longitud y latitud como parámetros, y devuelve una lista de reproducción de Spotify con canciones que se ajustan a la temperatura de la ubicación.
+Este servicio web implementa una API RESTful que acepta solicitudes que contienen el nombre de la ciudad o las coordenadas de longitud y latitud como parámetros, y devuelve una lista de reproducción de Spotify con canciones que se ajustan a la temperatura de la ubicación. Para acceder a este servicio, es necesario loguearse y obtener un token de acceso.
 
 ## Uso de la aplicación: 
 Este servicio utiliza las APIs de OpenWeatherMap y Spotify para obtener la temperatura actual de la ubicación especificada y las canciones recomendadas basadas en la temperatura. Los datos se almacenan en caché para reducir las solicitudes a las APIs. Los datos de OpenWeatherMap se actualizan cada 3 minutos y se almacenan en caché durante ese período, mientras que los datos de Spotify se actualizan cada 12 horas y se almacenan en caché durante ese tiempo. Después de obtener los datos de ambas APIs, se guarda la información relevante, como la hora de la solicitud, el género musical, la ciudad y las canciones recomendadas en una base de datos PostgreSQL.
