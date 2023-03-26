@@ -18,7 +18,6 @@ export class MostrarCancionesComponent {
     this.cancionesService.getCanciones(ciudad).subscribe(
       (canciones: any[]) => {
         this.canciones = canciones;
-        return canciones;
       },
       (error) => {
         console.log(error);
