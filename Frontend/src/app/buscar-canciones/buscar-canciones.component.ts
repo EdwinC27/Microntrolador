@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MostrarCancionesComponent } from '../mostrar-canciones/mostrar-canciones.component';
-import { CancionesService } from '../mostrar-canciones/mostrar-canciones.service';
 
 @Component({
   selector: 'app-buscar-canciones',
@@ -13,8 +12,6 @@ export class BuscarCancionesComponent {
 
   @ViewChild('mostrarCanciones', { static: false })
   mostrarCancionesComponent!: MostrarCancionesComponent;
-
-  constructor(private cancionesService: CancionesService) {}
 
   buscarCiudad() {
     console.log(this.inputText);
