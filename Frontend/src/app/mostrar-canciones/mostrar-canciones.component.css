@@ -1,0 +1,87 @@
+.botonProjects {
+    border: 1px solid #ec5151;
+    color: #d65d5d;
+    padding: 10px;
+    text-decoration: none;
+    display: block; 
+    margin: 0 auto;
+    text-align: center;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
+.contenedorProjects {
+    display: inline-flex;
+    flex-wrap: wrap;
+    padding-top: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
+    justify-content: center;
+}
+
+.diseñodivProjects {
+    margin-right: 30PX;
+    margin-bottom: 100px;
+    padding: 10px;
+    padding-top: 50px;
+    padding-bottom: 30px;
+    width: 25%;
+}
+
+.diseñodivProjects img  {
+    width: 60%;
+}
+
+.diseñodivProjectsMarco {
+    border: 1px solid rgb(139, 228, 131);
+    border-radius: 20%;
+}
+
+.proyectosTitle {
+    padding-top: 0px;
+    margin-top: 0;
+    font-size: 35px;
+    text-align: center;
+}
+
+.proyectosInfo {
+    font-size: 25px;
+    display: block;
+    text-align: center;
+    margin-bottom: 40px;
+    margin-top: 30px;
+
+}
+
+@media screen and (max-width: 999px) {
+	.diseñodivProjects {
+		width: 40%;
+	}
+}
+
+
+@media screen and (max-width: 685px) {
+	.diseñodivProjects {
+		width: 80%;
+	}
+}
+
+@media screen and (max-width: 1000px) {
+	.textColor {
+		margin-top: 0px;
+	}
+}
+
+@media screen and (max-width: 525px) {
+	.diseñodivProjects {
+		width: 90%;
+	}
+}
+
+@media screen and (max-width: 425px) {
+	.diseñodivProjects {
+		width: 300px;
+        margin-left: 20%;
+	}
+}

@@ -1,10 +1,12 @@
 <div class="search-container">
-    <img src="../../assets/imagenes/spotifyLogo.png" class="logo">
-  
-    <label class="separar">Buscar:</label>
-    <input id="ciudad" placeholder="Escribe el nombre de la ciudad...">
-    <button id="search-button" [disabled]="!botonHabilitado" (click)="buscarCiudad()">
-      <i class="fa fa-search"></i>
-      Buscar
-    </button>
+  <img src="../../assets/imagenes/spotifyLogo.png" class="logo">
+
+  <label class="separar">Buscar:</label>
+  <input id="ciudad" placeholder="Escribe el nombre de la ciudad..." [(ngModel)]="inputText" (input)="botonHabilitado = inputText.trim().length > 0" #ciudadInput>
+  <button id="search-button" [disabled]="!botonHabilitado" (click)="buscarCiudad()">
+    <i class="fa fa-search"></i>
+    Buscar
+  </button>
 </div>
+
+<app-mostrar-canciones #mostrarCanciones></app-mostrar-canciones>
