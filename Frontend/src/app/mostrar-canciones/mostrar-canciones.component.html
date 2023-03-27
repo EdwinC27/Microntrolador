@@ -1,7 +1,10 @@
-<div class="contenedorProjects">
-  <p>Lugar {{ city?.name }}  </p>
-  <p>Playlist: {{ city?.playlist }}  </p>
+<div class="infoCity">
+  <p>Lugar: {{ city?.name }}  </p>
+  <p>Genero: {{ city?.playlist }}  </p>
   <p>Temperatura: {{ city?.temperature }}  </p>
+</div>
+
+<div class="contenedorProjects">
 
   <div class="diseñodivProjects diseñodivProjectsMarco" *ngFor="let cancion of canciones">
     <h1 class="proyectosTitle">Cancion: {{ cancion.name }}</h1>

@@ -3,7 +3,7 @@
     color: #d65d5d;
     padding: 10px;
     text-decoration: none;
-    display: block; 
+    display: block;
     margin: 0 auto;
     text-align: center;
     margin-left: 10px;
@@ -84,4 +84,9 @@
 		width: 300px;
         margin-left: 20%;
 	}
+}
+
+.infoCity {
+  padding-top: 20px;
+  padding-left: 20px;
 }
