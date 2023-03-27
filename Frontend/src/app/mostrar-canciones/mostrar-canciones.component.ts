@@ -16,18 +16,10 @@ export class MostrarCancionesComponent {
   constructor(private cancionesService: CancionesService) { }
 
   imprimir (ciudad:string) {
-    this.cancionesService.getCanciones(ciudad).subscribe(
-      (canciones: any[]) => {
-        this.canciones = canciones;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-
-    this.cancionesService.getCity(ciudad).subscribe(
-      (city: any) => {
-        this.city = city;
+    this.cancionesService.getInfo(ciudad).subscribe(
+      () => {
+        this.canciones = this.cancionesService.canciones
+        this.city = this.cancionesService.citys;
       },
       (error) => {
         console.log(error);
