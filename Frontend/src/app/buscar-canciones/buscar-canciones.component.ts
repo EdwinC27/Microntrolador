@@ -14,7 +14,6 @@ export class BuscarCancionesComponent {
   mostrarCancionesComponent!: MostrarCancionesComponent;
 
   buscarCiudad() {
-    console.log(this.inputText);
     this.mostrarCancionesComponent.imprimir(this.inputText);
   }
 }

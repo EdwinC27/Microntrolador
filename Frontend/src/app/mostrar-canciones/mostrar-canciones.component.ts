@@ -11,6 +11,7 @@ import { CancionesService } from './mostrar-canciones.service';
 })
 export class MostrarCancionesComponent {
   canciones: any;
+  city: any;
 
   constructor(private cancionesService: CancionesService) { }
 
@@ -18,6 +19,15 @@ export class MostrarCancionesComponent {
     this.cancionesService.getCanciones(ciudad).subscribe(
       (canciones: any[]) => {
         this.canciones = canciones;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
+    this.cancionesService.getCity(ciudad).subscribe(
+      (city: any) => {
+        this.city = city;
       },
       (error) => {
         console.log(error);

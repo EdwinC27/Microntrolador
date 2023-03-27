@@ -1,4 +1,8 @@
 <div class="contenedorProjects">
+  <h1>{{ city?.name }}</h1>
+  <p>Coordenadas: {{ city?.coordinates }}</p>
+  <p>Playlist: {{ city?.playlist }}</p>
+  <p>Temperatura: {{ city?.temperature }}</p>
 
   <div class="diseñodivProjects diseñodivProjectsMarco" *ngFor="let cancion of canciones">
     <h1 class="proyectosTitle">Cancion: {{ cancion.name }}</h1>
@@ -7,6 +11,4 @@
     <a class="botonProjects" target="_blank" [href]=" cancion.url ">Ir a Spotify</a>
   </div>
 
-</div> 
-
-
+</div>

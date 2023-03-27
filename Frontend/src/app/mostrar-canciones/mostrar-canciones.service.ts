@@ -20,4 +20,13 @@ export class CancionesService {
       })
     );
   }
+
+  getCity(ciudad: string) {
+    return this.getPeticionCanciones(ciudad).pipe(
+      map((response: any) => {
+        return response.city;
+      })
+    );
+  }
+
 }
