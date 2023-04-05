@@ -1,3 +1,9 @@
+<div class="infoCity">
+  <p>Lugar: {{ city?.name }}  </p>
+  <p>Genero: {{ city?.playlist }}  </p>
+  <p>Temperatura: {{ city?.temperature }}  </p>
+</div>
+
 <div class="contenedorProjects">
 
   <div class="diseñodivProjects diseñodivProjectsMarco" *ngFor="let cancion of canciones">
@@ -7,6 +13,4 @@
     <a class="botonProjects" target="_blank" [href]=" cancion.url ">Ir a Spotify</a>
   </div>
 
-</div> 
-
-
+</div>

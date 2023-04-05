@@ -8,16 +8,21 @@ import { map } from 'rxjs';
 export class CancionesService {
   constructor(private http: HttpClient) { }
 
+  public citys: any;
+  public canciones:any;
+
   getPeticionCanciones(ciudad: string) {
     const url = `http://localhost:8080/api/temperatura?ciudad=${ciudad}`;
     return this.http.get(url);
   }
 
-  getCanciones(ciudad: string) {
+  getInfo(ciudad: string) {
     return this.getPeticionCanciones(ciudad).pipe(
       map((response: any) => {
-        return response.songs;
+        this.canciones = response.songs;
+        this.citys = response.city;
       })
     );
   }
+
 }

@@ -11,13 +11,15 @@ import { CancionesService } from './mostrar-canciones.service';
 })
 export class MostrarCancionesComponent {
   canciones: any;
+  city: any;
 
   constructor(private cancionesService: CancionesService) { }
 
   imprimir (ciudad:string) {
-    this.cancionesService.getCanciones(ciudad).subscribe(
-      (canciones: any[]) => {
-        this.canciones = canciones;
+    this.cancionesService.getInfo(ciudad).subscribe(
+      () => {
+        this.canciones = this.cancionesService.canciones
+        this.city = this.cancionesService.citys;
       },
       (error) => {
         console.log(error);
