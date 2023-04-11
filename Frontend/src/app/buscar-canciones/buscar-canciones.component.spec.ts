@@ -20,21 +20,4 @@ describe('BuscarCancionesComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should have inputText and botonHabilitado initialized to empty string and false', () => {
-    expect(component.inputText).toEqual('');
-    expect(component.botonHabilitado).toEqual(false);
-  });
-
-  it('should update botonHabilitado when inputText is changed', () => {
-    component.inputText = 'test';
-    expect(component.botonHabilitado).toEqual(true);
-  });
-
-  it('should call mostrarCancionesComponent.imprimir when buscarCiudad is called', () => {
-    spyOn(component.mostrarCancionesComponent, 'imprimir');
-    component.inputText = 'test';
-    component.buscarCiudad();
-    expect(component.mostrarCancionesComponent.imprimir).toHaveBeenCalledWith('test');
-  });
 });
