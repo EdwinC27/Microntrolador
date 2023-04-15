@@ -4,13 +4,19 @@
   <p>Temperatura: {{ city?.temperature }}  </p>
 </div>
 
-<div class="contenedorProjects">
-
-  <div class="diseñodivProjects diseñodivProjectsMarco" *ngFor="let cancion of canciones">
-    <h1 class="proyectosTitle">Cancion: {{ cancion.name }}</h1>
-    <label class="proyectosInfo">Artista: {{ cancion.artista }}</label>
-    <label class="proyectosInfo">Album: {{ cancion.albun }}</label>
-    <a class="botonProjects" target="_blank" [href]=" cancion.url ">Ir a Spotify</a>
+<div class="margen">
+  <div *ngIf="canciones==''">
+    <p class="sinCiudad">Ciudad sin buscar</p>
   </div>
 
+  <div class="contenedorProjects">
+
+    <div class="diseñodivProjects diseñodivProjectsMarco" *ngFor="let cancion of canciones">
+      <h1 class="proyectosTitle">Cancion: {{ cancion.name }}</h1>
+      <label class="proyectosInfo">Artista: {{ cancion.artista }}</label>
+      <label class="proyectosInfo">Album: {{ cancion.albun }}</label>
+      <a class="botonProjects" target="_blank" [href]=" cancion.url ">Ir a Spotify</a>
+    </div>
+
+  </div>
 </div>

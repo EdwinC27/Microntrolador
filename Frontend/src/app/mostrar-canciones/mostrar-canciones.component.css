@@ -10,6 +10,9 @@
     margin-right: 10px;
 }
 
+.margen {
+    border: 2px #097cff solid;
+}
 
 .contenedorProjects {
     display: inline-flex;
@@ -89,4 +92,9 @@
 .infoCity {
   padding-top: 20px;
   padding-left: 20px;
+  font-size: 20px;
+}
+
+.sinCiudad {
+    padding: 20px; font-size: 30px;
 }

@@ -10,7 +10,7 @@ import { CancionesService } from './mostrar-canciones.service';
   styleUrls: ['./mostrar-canciones.component.css']
 })
 export class MostrarCancionesComponent {
-  canciones: any;
+  canciones: any = "";
   city: any;
 
   constructor(private cancionesService: CancionesService) { }
