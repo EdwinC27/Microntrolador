@@ -56,7 +56,7 @@ To use this project, you can follow one of the following instructions:
     ```  
        git clone git@github.com:EdwinC27/Microcontrolador.git  
     ```
-2. Once downloaded, unzip the file and open the project folder.
+2. Once downloaded, open the project folder.
 3. Modify the **service.properties** file located in **src/main/resources**, adding the necessary data for authentication to the APIs that you are going to use. You must put your own authentication data and the necessary URLs.
 4. Implement the corresponding PostgreSQL database:
    - You can change the name of the database.
