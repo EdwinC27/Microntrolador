@@ -1,57 +1,60 @@
-# Documentación         
+# Documentation         
  
-Este servicio web implementa una API RESTful que acepta solicitudes que contienen el nombre de la ciudad o las coordenadas de longitud y latitud como parámetros, y devuelve una lista de reproducción de Spotify con canciones que se ajustan a la temperatura de la ubicación. 
+This web service implements a RESTful API that accepts requests containing either the name of a city or longitude and latitude coordinates as parameters, and returns a Spotify playlist with songs that match the temperature of the location.
 
-## Uso de la aplicación: 
-Este servicio utiliza las APIs de OpenWeatherMap y Spotify para obtener la temperatura actual de la ubicación especificada y las canciones recomendadas basadas en la temperatura. Los datos se almacenan en caché para reducir las solicitudes a las APIs. Los datos de OpenWeatherMap se actualizan cada 3 minutos y se almacenan en caché durante ese período, mientras que los datos de Spotify se actualizan cada 12 horas y se almacenan en caché durante ese tiempo. Después de obtener los datos de ambas APIs, se guarda la información relevante, como la hora de la solicitud, el género musical, la ciudad y las canciones recomendadas en una base de datos PostgreSQL.
+
+## Using the application:
+This service uses the OpenWeatherMap and Spotify APIs to obtain the current temperature of the specified location and the recommended songs based on the temperature. Data is cached to reduce requests to the APIs. OpenWeatherMap data is updated every 3 minutes and cached during that period, while Spotify data is updated every 12 hours and cached during that time. After obtaining data from both APIs, relevant information such as request time, musical genre, city, and recommended songs is stored in a PostgreSQL database.
 
 <img src="https://github.com/EdwinC27/Microcontrolador/blob/main/diagramaSecuencia.png">
 
 
-### Para utilizar el servicio, se pueden enviar solicitudes a través de dos URLs:
+### To use the service, requests can be sent through two URLs:
 
-> http://localhost:8080/api/temperatura/?ciudad=nombre-de-ciudad : para obtener la temperatura de una ciudad en particular.
+> http://localhost:8080/api/temperatura/?ciudad=city-name: to get the temperature of a particular city.
 
-> http://localhost:8080/api/temperatura/?latitud=valor-latitud&longitud=valor-longitud : para obtener la temperatura de una ubicación específica según sus coordenadas de longitud y latitud.
+> http://localhost:8080/api/temperatura/?latitud=latitude-value&longitud=longitude-value: to get the temperature of a specific location based on its longitude and latitude coordinates.
 
-### Para explorar la documentación de la API, se pueden utilizar las siguientes URLs:
+### To explore the API documentation, the following URLs can be used:
 
-> http://localhost:8080/v3/api-docs: para acceder a la especificación OpenAPI en formato JSON.
+> http://localhost:8080/v3/api-docs: to access the OpenAPI specification in JSON format.
 
-> http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config: para acceder a la interfaz de usuario Swagger UI.
+> http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config: to access the Swagger UI user interface.
 
-# Detalles de cada paquetes
+# Details of each package
  
-## Paquete “servicios”
-* La implementación del Conector_OpenWeatherMap se utiliza para obtener la temperatura actual de una ciudad o coordenadas geográficas mediante la conexión a la API de OpenWeatherMap. Tiene dos métodos principales, "getURLCiudad" y "getURLCordenada", que se intentan ejecutar hasta un máximo de 3 veces. También utiliza caché para evitar solicitudes repetitivas y dos variables de instancia para contener la clave de API y la URL base para hacer las solicitudes.
+## Package "servicios"
 
-* La implementación de Llave_Spotify obtiene un token de acceso mediante la autenticación de un cliente con sus credenciales. Verifica si el token actual está vigente para obtener uno nuevo si es necesario. El método principal de la clase es "getToken()". También utiliza RestTemplate para realizar una solicitud HTTP POST a la URL de autorización de Spotify.
-
-* La implementación de Conector_Spotify utiliza métodos para hacer peticiones a la API de Spotify y devuelve resultados basados en la temperatura y el género musical. También utiliza una instancia de la clase Llave_Spotify para obtener un token de acceso a la API. Contiene métodos para procesar la respuesta de la API y extraer información de las canciones.
-
-* La implementación de General_Json tiene dos métodos. El primer método, infoRegresada, crea un objeto JSON y agrega información de la ciudad y su temperatura, coordenadas y nombre de la playlist en un objeto JSON cityLista. También agrega información de las canciones en un array JSON songsListas. El segundo método, erroGenerado, crea un objeto JSON que contiene información sobre el error que ocurrió.
+* The implementation of Conector_OpenWeatherMap is used to obtain the current temperature of a city or geographic coordinates by connecting to the OpenWeatherMap API. It has two main methods, "getURLCiudad" and "getURLCordenada," which are attempted to be executed up to a maximum of 3 times. It also uses caching to avoid repetitive requests and two instance variables to hold the API key and base URL for making requests.
 
 
+* The implementation of Llave_Spotify obtains an access token by authenticating a client with their credentials. It verifies if the current token is valid to obtain a new one if necessary. The main method of the class is "getToken()". It also uses RestTemplate to make an HTTP POST request to the Spotify authorization URL.
 
-## Paquete “controladores”
-* La implementación de Consulta es un código que define un controlador REST para obtener la temperatura y canciones recomendadas para una ciudad o coordenadas geográficas. El controlador "Consulta" está anotado con "@RestController", y tiene tres campos autowired: "Conector_OpenWeatherMap", "RepositorioListaMusica" y "Conector_Spotify". El método "getTemperatura" es un controlador REST anotado con "@GetMapping" y accesible en la ruta "/api/temperatura". Toma tres parámetros opcionales ("ciudad", "latitud" y "longitud") y devuelve un objeto JSON con información sobre la temperatura y las canciones recomendadas. El método verifica la conexión a Internet y, si es exitosa, determina si se proporciona una ciudad o coordenadas geográficas. Si se proporciona una ciudad, obtiene la temperatura de la ciudad usando "getURLCiudad" del objeto "Conector_OpenWeatherMap", y luego genera una lista de canciones recomendadas para la temperatura con "peticionGenero" del objeto "Conector_Spotify". El método también guarda la información de la ciudad en una base de datos. Si se proporcionan coordenadas geográficas, realiza los mismos pasos. El método "guardarMiEntidad" guarda la información de la temperatura, la ciudad y las canciones recomendadas en un objeto "ListaMusica" que se guarda en la base de datos utilizando el objeto "RepositorioListaMusica".
+
+* The implementation of Conector_Spotify uses methods to make requests to the Spotify API and returns results based on temperature and musical genre. It also uses an instance of the Llave_Spotify class to obtain an access token to the API. It contains methods to process the API response and extract song information.
+
+* The implementation of General_Json has two methods. The first method, infoRegresada, creates a JSON object and adds information about the city and its temperature, coordinates, and playlist name to a JSON object cityLista. It also adds information about the songs to a JSON array songsListas. The second method, erroGenerado, creates a JSON object that contains information about the error that occurred.
 
 
 
-## Paquete “configuraciones” 
-* La implementación de ComprobarConexionJava tiene un método llamado "conexion()" que devuelve un booleano indicando si hay o no conexión a Internet. Este método crea un objeto Socket para intentar conectarse a un servidor en la dirección web y puerto especificados. Si la conexión es exitosa, devuelve "true", de lo contrario, devuelve "false".
-
-* La implementación de OpenWeatherMapCache es un componente de Spring que usa la anotación @Component y @EnableScheduling para programar tareas en la aplicación. Esta clase maneja una caché de resultados obtenidos de la API de OpenWeatherMap. El método limpiarCache se ejecuta cada 3 minutos para borrar los resultados antiguos y asegurarse de que se obtengan los resultados más recientes de la API.
-
-* La implementación de SpotifyCache es un componente de Spring que usa la anotación @EnableScheduling para programar tareas en la aplicación. Esta clase maneja una caché de resultados obtenidos de Spotify. El método limpiarCache se ejecuta cada 12 horas para borrar los resultados antiguos y asegurarse de que los resultados almacenados en caché no ocupen espacio innecesario en la memoria.
-
-* La implementación de ConfigCors es la clase de configuración de Spring que habilita la política de mismo origen cruzado (CORS) en una aplicación web Spring Boot. La política CORS es una medida de seguridad implementada por los navegadores web para prevenir ataques maliciosos en los navegadores, como el robo de cookies de sesión. 
+## "controllers" package
+* The implementation of "Consulta" is code that defines a REST controller to get the temperature and recommended songs for a city or geographic coordinates. The "Consulta" controller is annotated with "@RestController" and has three autowired fields: "Conector_OpenWeatherMap", "RepositorioListaMusica", and "Conector_Spotify". The "getTemperatura" method is a REST controller annotated with "@GetMapping" and accessible at the "/api/temperatura" path. It takes three optional parameters ("ciudad", "latitud", and "longitud") and returns a JSON object with information about the temperature and recommended songs. The method checks the internet connection, and if it's successful, determines if a city or geographic coordinates are provided. If a city is provided, it obtains the temperature of the city using "getURLCiudad" from the "Conector_OpenWeatherMap" object, and then generates a list of recommended songs for the temperature with "peticionGenero" from the "Conector_Spotify" object. The method also saves the city information in a database. If geographic coordinates are provided, it performs the same steps. The "guardarMiEntidad" method saves the temperature, city, and recommended songs information in a "ListaMusica" object that is saved in the database using the "RepositorioListaMusica" object.
 
 
 
-## Paquete “entidades”
-* La implementación de ListaMusica se encarga de de instanciar los campos que tiene la tabla **informacion_generada**.
+## "configurations" package
+* The implementation of "ComprobarConexionJava" has a method called "conexion()" that returns a boolean indicating whether there is an internet connection or not. This method creates a Socket object to attempt to connect to a server at the specified web address and port. If the connection is successful, it returns "true", otherwise, it returns "false".
+
+* The implementation of "OpenWeatherMapCache" is a Spring component that uses the "@Component" and "@EnableScheduling" annotations to schedule tasks in the application. This class handles a cache of results obtained from the OpenWeatherMap API. The "limpiarCache" method runs every 3 minutes to clear old results and ensure that the most recent results from the API are obtained.
+
+* The implementation of "SpotifyCache" is a Spring component that uses the "@EnableScheduling" annotation to schedule tasks in the application. This class handles a cache of results obtained from Spotify. The "limpiarCache" method runs every 12 hours to clear old results and ensure that cached results don't occupy unnecessary space in memory.
+
+* The implementation of "ConfigCors" is the Spring configuration class that enables Cross-Origin Resource Sharing (CORS) policy in a Spring Boot web application. The CORS policy is a security measure implemented by web browsers to prevent malicious attacks on browsers, such as session cookie theft.
 
 
-## Paquete “repositorios”
-* La implementación de RepositorioListaMusica define una interfaz que extiende la interfaz JpaRepository de Spring Data JPA y se utiliza para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en la tabla de base de datos correspondiente a la entidad "ListaMusica".
+## "entities" package
+* The implementation of "ListaMusica" is responsible for instantiating the fields of the "informacion_generada" table.
+
+
+## "repositories" package
+* The implementation of "RepositorioListaMusica" defines an interface that extends the Spring Data JPA "JpaRepository" interface and is used to perform CRUD (Create, Read, Update, Delete) operations on the database table corresponding to the "ListaMusica" entity.
