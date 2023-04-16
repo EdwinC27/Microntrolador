@@ -1,4 +1,6 @@
 # Ducumentación
+La documentación de esta aplicación incluye un mockup, el cual se puede visualizar en la siguiente imagen:
+<img src="https://github.com/EdwinC27/Microcontrolador/blob/Frontend/Boceto%20de%20FrontEnd.png">
 
 ## Paquete "buscar-canciones"
 
