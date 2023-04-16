@@ -31,14 +31,10 @@ Este servicio utiliza las APIs de OpenWeatherMap y Spotify para obtener la tempe
 
 * La implementación de General_Json tiene dos métodos. El primer método, infoRegresada, crea un objeto JSON y agrega información de la ciudad y su temperatura, coordenadas y nombre de la playlist en un objeto JSON cityLista. También agrega información de las canciones en un array JSON songsListas. El segundo método, erroGenerado, crea un objeto JSON que contiene información sobre el error que ocurrió.
 
-* La implementación de JWT_Authorization_Filter es una clase Java que implementa un filtro de autorización JWT para proteger los endpoints de una aplicación web. Extiende de la clase OncePerRequestFilter y utiliza una clave secreta para validar y decodificar los tokens JWT.
-
 
 
 ## Paquete “controladores”
 * La implementación de Consulta es un código que define un controlador REST para obtener la temperatura y canciones recomendadas para una ciudad o coordenadas geográficas. El controlador "Consulta" está anotado con "@RestController", y tiene tres campos autowired: "Conector_OpenWeatherMap", "RepositorioListaMusica" y "Conector_Spotify". El método "getTemperatura" es un controlador REST anotado con "@GetMapping" y accesible en la ruta "/api/temperatura". Toma tres parámetros opcionales ("ciudad", "latitud" y "longitud") y devuelve un objeto JSON con información sobre la temperatura y las canciones recomendadas. El método verifica la conexión a Internet y, si es exitosa, determina si se proporciona una ciudad o coordenadas geográficas. Si se proporciona una ciudad, obtiene la temperatura de la ciudad usando "getURLCiudad" del objeto "Conector_OpenWeatherMap", y luego genera una lista de canciones recomendadas para la temperatura con "peticionGenero" del objeto "Conector_Spotify". El método también guarda la información de la ciudad en una base de datos. Si se proporcionan coordenadas geográficas, realiza los mismos pasos. El método "guardarMiEntidad" guarda la información de la temperatura, la ciudad y las canciones recomendadas en un objeto "ListaMusica" que se guarda en la base de datos utilizando el objeto "RepositorioListaMusica".
-
-* La implementación de UserController es una clase Java que maneja la lógica de un controlador REST para el manejo de usuarios. El controlador recibe solicitudes POST a la ruta "/user" con el método "login" y el objeto JSON "User" en el cuerpo de la solicitud. El método "login" verifica si el usuario existe en la base de datos y, si es así, genera un token JWT utilizando "getJWTToken". El método "guardarMitoken" guarda el token generado en la base de datos para el usuario correspondiente. El controlador devuelve un objeto JSON "User" con el token generado y el estado de la operación. En resumen, estos controladores son responsables de proporcionar información de temperatura y canciones recomendadas, y manejar la autenticación de usuarios con tokens JWT para acceder a recursos protegidos en una aplicación web.
 
 
 
@@ -47,20 +43,15 @@ Este servicio utiliza las APIs de OpenWeatherMap y Spotify para obtener la tempe
 
 * La implementación de OpenWeatherMapCache es un componente de Spring que usa la anotación @Component y @EnableScheduling para programar tareas en la aplicación. Esta clase maneja una caché de resultados obtenidos de la API de OpenWeatherMap. El método limpiarCache se ejecuta cada 3 minutos para borrar los resultados antiguos y asegurarse de que se obtengan los resultados más recientes de la API.
 
-* La implementación de PasswordUtils tiene dos métodos estáticos para trabajar con contraseñas. El método verifyPassword verifica si una contraseña en texto plano es igual a una contraseña almacenada en la base de datos en forma de hash. El método hashPasswordJson convierte una contraseña en texto plano en un hash SHA-256 en forma de cadena. Ambos métodos se pueden invocar directamente desde la clase PasswordUtils sin la necesidad de crear una instancia de la clase. La clase está anotada con @Configuration y se puede utilizar en el contexto de una aplicación Spring.
-
 * La implementación de SpotifyCache es un componente de Spring que usa la anotación @EnableScheduling para programar tareas en la aplicación. Esta clase maneja una caché de resultados obtenidos de Spotify. El método limpiarCache se ejecuta cada 12 horas para borrar los resultados antiguos y asegurarse de que los resultados almacenados en caché no ocupen espacio innecesario en la memoria.
 
-* La implementación de WebSecurityConfig es una configuración de seguridad para una aplicación web que utiliza Spring Security. La anotación @EnableWebSecurity se utiliza para habilitar la seguridad web en la aplicación. Esta clase extiende WebSecurityConfigurerAdapter y sobrescribe métodos para personalizar la configuración de seguridad. El método jwtAuthorizationFilter define un filtro personalizado para autenticar y autorizar a los usuarios en función de un token JWT. El método configure se utiliza para configurar la seguridad de la aplicación, incluyendo la protección CSRF y la autenticación de usuarios.
+* La implementación de ConfigCors es la clase de configuración de Spring que habilita la política de mismo origen cruzado (CORS) en una aplicación web Spring Boot. La política CORS es una medida de seguridad implementada por los navegadores web para prevenir ataques maliciosos en los navegadores, como el robo de cookies de sesión. 
 
 
 
 ## Paquete “entidades”
 * La implementación de ListaMusica se encarga de de instanciar los campos que tiene la tabla **informacion_generada**.
-* La implementación de User se encarga de de instanciar los campos que tiene la tabla **users**.
-
 
 
 ## Paquete “repositorios”
 * La implementación de RepositorioListaMusica define una interfaz que extiende la interfaz JpaRepository de Spring Data JPA y se utiliza para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en la tabla de base de datos correspondiente a la entidad "ListaMusica".
-* La implementación de RepositorioUser define una interfaz que extiende la interfaz JpaRepository de Spring Data JPA y se utiliza para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en la tabla de base de datos correspondiente a la entidad "User".
