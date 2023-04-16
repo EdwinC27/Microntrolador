@@ -1,33 +1,27 @@
-# Ducumentación
-La documentación de esta aplicación incluye un mockup, el cual se puede visualizar en la siguiente imagen:
+# Ducumentation 
+The documentation of this application includes a mockup, which can be viewed in the following image:
 <img src="https://github.com/EdwinC27/Microcontrolador/blob/Frontend/Boceto%20de%20FrontEnd.png">
 
-## Paquete "buscar-canciones"
+## package "buscar-canciones" 
 
 ### buscar-canciones.component.html
-Este código representa una sección de la interfaz de usuario de una aplicación web que permite a los usuarios buscar canciones de Spotify por nombre de ciudad. Contiene una imagen del logotipo de Spotify, un campo de entrada de texto para que el usuario escriba el nombre de la ciudad, un botón de búsqueda que se habilita cuando el usuario ingresa texto en el campo de entrada y un componente personalizado de la aplicación para mostrar los resultados de la búsqueda de canciones de Spotify en la ciudad especificada.
+This code represents a section of the user interface of a web application that allows users to search for Spotify songs by city name. It contains an image of the Spotify logo, a text input field for the user to enter the city name, a search button that is enabled when the user enters text in the input field, and a custom application component to display the results of the Spotify song search in the specified city.
 
-### buscar-canciones.component.ts 
-Este código define un componente de Angular llamado BuscarCancionesComponent que se encarga de buscar canciones de Spotify por nombre de ciudad. El componente tiene una propiedad para almacenar el texto de búsqueda, una propiedad para habilitar o deshabilitar el botón de búsqueda, un decorador para obtener una referencia al componente MostrarCancionesComponent y un método que llama al método imprimir() del componente MostrarCancionesComponent para mostrar los resultados de la búsqueda en la interfaz de usuario.
+### buscar-canciones.component.ts
+This code defines an Angular component called BuscarCancionesComponent, which is responsible for searching for Spotify songs by city name. The component has a property to store the search text, a property to enable or disable the search button, a decorator to obtain a reference to the MostrarCancionesComponent component, and a method that calls the imprimir() method of the MostrarCancionesComponent component to display the search results in the user interface.
 
 
 
-## Paquete "mostrar-canciones"
+## package "mostrar-canciones" 
 
 ### mostrar-canciones.component.html
-El código representa una sección de la interfaz de usuario de una aplicación web que muestra información sobre la ciudad seleccionada y una lista de canciones encontradas para esa ciudad. Se utiliza la directiva estructural *ngFor para iterar sobre la lista de canciones y mostrar información sobre cada una, como el título, el artista y el álbum. Además, se utiliza la directiva *ngIf para mostrar un mensaje si no se ha realizado una búsqueda de canciones para la ciudad seleccionada.
-
+This code represents a section of the user interface of a web application that displays information about the selected city and a list of songs found for that city. The *ngFor structural directive is used to iterate over the list of songs and display information about each one, such as the title, artist, and album. Additionally, the *ngIf directive is used to display a message if no song search has been performed for the selected city.
 
 ### mostrar-canciones.component.ts
-Este código representa un componente Angular llamado MostrarCancionesComponent, que se utiliza para mostrar una lista de canciones y la información de la ciudad seleccionada. Se utiliza una instancia del servicio CancionesService para obtener la información de la ciudad y la lista de canciones. Si la llamada es exitosa, los datos se asignan a las propiedades city y canciones del componente. Este componente se utiliza en el componente BuscarCancionesComponent mediante la directiva app-mostrar-canciones.
-
+This code represents an Angular component called MostrarCancionesComponent, which is used to display a list of songs and information about the selected city. An instance of the CancionesService service is used to obtain information about the city and the list of songs. If the call is successful, the data is assigned to the city and songs properties of the component. This component is used in the BuscarCancionesComponent component using the app-mostrar-canciones directive.
 
 ### mostrar-canciones.model.ts
-Este código define una interfaz TypeScript llamada ApiResponse. La interfaz describe la estructura de los datos de respuesta que se reciben desde algún API. La interfaz tiene dos propiedades: city, que es un objeto que contiene las coordenadas de la ciudad, el nombre de la ciudad, la temperatura y una lista de reproducción de Spotify asociada a la ciudad; y songs, que es una matriz de objetos que contiene información sobre las canciones, como el nombre de la canción, el nombre del artista, el álbum y la URL de la canción en Spotify.
-
+This code defines a TypeScript interface called ApiResponse. The interface describes the structure of response data received from some API. The interface has two properties: city, which is an object containing the city's coordinates, name, temperature, and a Spotify playlist associated with the city; and songs, which is an array of objects containing information about the songs, such as the song name, artist name, album, and the song's URL on Spotify.
 
 ### mostrar-canciones.service.ts
-Este código define un servicio llamado CancionesService, que se utiliza para realizar peticiones HTTP al servidor. El servicio tiene un método llamado getPeticionCanciones que realiza una petición HTTP GET al servidor y devuelve la respuesta. También tiene un método llamado getInfo que llama al método getPeticionCanciones y utiliza el operador map de RxJS para asignar la respuesta de la petición a las propiedades canciones y citys del servicio. La clase utiliza la inyección de dependencias para obtener una instancia de HttpClient, que se utiliza para realizar la petición HTTP.
-
-
-
+This code defines a service called CancionesService, which is used to make HTTP requests to the server. The service has a method called getPeticionCanciones that makes an HTTP GET request to the server and returns the response. It also has a method called getInfo that calls the getPeticionCanciones method and uses the RxJS map operator to assign the response of the request to the songs and citys properties of the service. The class uses dependency injection to obtain an instance of HttpClient, which is used to make the HTTP request.
