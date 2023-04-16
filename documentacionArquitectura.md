@@ -1,5 +1,26 @@
 # Documentación         
  
+Este servicio web implementa una API RESTful que acepta solicitudes que contienen el nombre de la ciudad o las coordenadas de longitud y latitud como parámetros, y devuelve una lista de reproducción de Spotify con canciones que se ajustan a la temperatura de la ubicación. 
+
+## Uso de la aplicación: 
+Este servicio utiliza las APIs de OpenWeatherMap y Spotify para obtener la temperatura actual de la ubicación especificada y las canciones recomendadas basadas en la temperatura. Los datos se almacenan en caché para reducir las solicitudes a las APIs. Los datos de OpenWeatherMap se actualizan cada 3 minutos y se almacenan en caché durante ese período, mientras que los datos de Spotify se actualizan cada 12 horas y se almacenan en caché durante ese tiempo. Después de obtener los datos de ambas APIs, se guarda la información relevante, como la hora de la solicitud, el género musical, la ciudad y las canciones recomendadas en una base de datos PostgreSQL.
+
+<img src="https://github.com/EdwinC27/Microcontrolador/blob/main/diagramaSecuencia.png">
+
+
+### Para utilizar el servicio, se pueden enviar solicitudes a través de dos URLs:
+
+> http://localhost:8080/api/temperatura/?ciudad=nombre-de-ciudad : para obtener la temperatura de una ciudad en particular.
+
+> http://localhost:8080/api/temperatura/?latitud=valor-latitud&longitud=valor-longitud : para obtener la temperatura de una ubicación específica según sus coordenadas de longitud y latitud.
+
+### Para explorar la documentación de la API, se pueden utilizar las siguientes URLs:
+
+> http://localhost:8080/v3/api-docs: para acceder a la especificación OpenAPI en formato JSON.
+
+> http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config: para acceder a la interfaz de usuario Swagger UI.
+
+# Detalles de cada paquetes
  
 ## Paquete “servicios”
 * La implementación del Conector_OpenWeatherMap se utiliza para obtener la temperatura actual de una ciudad o coordenadas geográficas mediante la conexión a la API de OpenWeatherMap. Tiene dos métodos principales, "getURLCiudad" y "getURLCordenada", que se intentan ejecutar hasta un máximo de 3 veces. También utiliza caché para evitar solicitudes repetitivas y dos variables de instancia para contener la clave de API y la URL base para hacer las solicitudes.
