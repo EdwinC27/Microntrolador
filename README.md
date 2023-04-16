@@ -1,6 +1,11 @@
 # Servicio de sugerencias de canciones por temperatura
 Es una extensión del proyecto principal que incluye una interfaz de usuario para utilizar la API. Es importante mencionar que esta versión de la API tiene algunas diferencias con respecto a la original, entre ellas, la inclusión de las URL de las canciones recomendadas. Además, al igual que la API principal, esta extensión no cuenta con un control de acceso.
 
+Puedes ver mas informacion detallada en estos archivos:
+<a href="https://github.com/EdwinC27/Microcontrolador/blob/Frontend/documentacionArquitecturaAPI.md">Documentación de la API</a>
+<a href="https://github.com/EdwinC27/Microcontrolador/blob/Frontend/documentacionArquitecturaFront.md">Documentación del FrontEnd</a>
+
+
 ## Requisitos:
 - Para poder utilizar este programa, es necesario que su sistema operativo tenga instalado Java 11 o una versión más reciente. Si no cuenta con Java, puede descargar e instalar la versión correspondiente, por ejemplo desde la página de: https://adoptium.net/temurin/releases/.
 
