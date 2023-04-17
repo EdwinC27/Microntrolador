@@ -10,6 +10,7 @@ export class CancionesService {
 
   public citys: any;
   public canciones:any;
+  public error:any;
 
   getPeticionCanciones(ciudad: string) {
     const url = `http://localhost:8080/api/temperatura?ciudad=${ciudad}`;
@@ -21,6 +22,7 @@ export class CancionesService {
       map((response: any) => {
         this.canciones = response.songs;
         this.citys = response.city;
+        this.error = response.error;
       })
     );
   }

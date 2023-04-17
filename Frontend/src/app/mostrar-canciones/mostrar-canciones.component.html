@@ -9,6 +9,10 @@
     <p class="sinCiudad">Ciudad sin buscar</p>
   </div>
 
+  <div *ngIf="error!=''">
+    <p class="error">Ocurrio un error al buscar la ciudad por favor intente con otra ciudad</p>
+  </div>
+
   <div class="contenedorProjects">
 
     <div class="diseñodivProjects diseñodivProjectsMarco" *ngFor="let cancion of canciones">
