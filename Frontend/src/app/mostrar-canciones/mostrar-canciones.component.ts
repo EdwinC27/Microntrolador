@@ -22,6 +22,10 @@ export class MostrarCancionesComponent {
         this.canciones = this.cancionesService.canciones
         this.city = this.cancionesService.citys;
         this.error = this.cancionesService.error;
+
+        if(typeof(this.error) == 'undefined') {
+          this.error = "";
+        }
       },
       (error) => {
         console.log(error);
